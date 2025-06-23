@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82d5013fbf2d7a1489f325bf869706b4, type: 3}
+  m_Name: BombProjSwap
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeInfo
+  UpgradeName: Explosive Ammo
+  UpgradeDescription: Adds an AOE damage effect on hit.
+  NextUpgrade: {fileID: 0}
+  UpgradeImage: {fileID: 21300000, guid: ea890d659cc178e4cb96ef759b99732c, type: 3}
+  Cost: 100
+  StartingUpgrade: 1
+  Effects:
+  - {fileID: 11400000, guid: e16c0bdbe299e7146bfa788f2c96afa6, type: 2}

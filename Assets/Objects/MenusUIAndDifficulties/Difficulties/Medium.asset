@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5c82b7686887cb4bacca9d33f559618, type: 3}
+  m_Name: Medium
+  m_EditorClassIdentifier: 
+  DifficultyName: Medium
+  StartingHealth: 150
+  StartingCash: 150
+  BloonSpeedIncrease: 0.2
+  MedalColour: {r: 0.4433962, g: 0.41568047, b: 0.3952919, a: 1}
+  VictoryTheme: {fileID: 8300000, guid: 2ef220e39a4c5a449ae35084d2e1860c, type: 3}
