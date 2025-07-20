@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 605685468889615371}
   - component: {fileID: -6325285784357734377}
   - component: {fileID: -2437345288853011919}
+  - component: {fileID: 393462321241523618}
   m_Layer: 3
   m_Name: YellowBloon
   m_TagString: Untagged
@@ -127,7 +128,8 @@ MonoBehaviour:
   PathManager: {fileID: 0}
   CurrentPath: 0
   Health: 3
-  Speed: 7
+  MaxSpeed: 1
+  CurrentSpeed: 0
   MoneyOnDeath: 1
   LayerID: 2
   LayerOrder: {fileID: 11400000, guid: 87481ff0d8ddb7a48b6def865887ca64, type: 2}
@@ -5035,3 +5037,30 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!54 &393462321241523618
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 647415822513163612}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 0
+  m_ImplicitTensor: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

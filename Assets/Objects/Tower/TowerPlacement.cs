@@ -1,7 +1,7 @@
-using Unity.VisualScripting;
+using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static Unity.Collections.Unicode;
+
 //using static UnityEditor.Rendering.CameraUI;
 
 public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, IEndDragHandler
@@ -79,7 +79,25 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
         if (PathHolder.instance)
         {
 
-            PathHolder.instance.RangeVisual.transform.position = output;
+            int TowerLayerID = LayerMask.NameToLayer("Tower");
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
+            RaycastHit hit;
+            // ray.origin = GetComponent<RectTransform>().position;
+
+
+            //  if (Physics.Raycast(ray, out hit, 9999, GroundCheck))
+            if (Physics.Raycast(ray, out hit) && hit.transform.gameObject.layer == TowerLayerID)
+            {
+                GetComponent<Image>().color = Color.red;
+            }
+            else
+            {
+                GetComponent<Image>().color = Color.white;
+            }
+
+
+                PathHolder.instance.RangeVisual.transform.position = output;
             PathHolder.instance.RangeVisual.transform.localScale = Vector3.one;
             PathHolder.instance.RangeVisual.transform.localScale *= TowerToSpawn.GetComponent<BaseTower>().Range * 4; // diameter to range, multiplied due to UI scaling
             GetComponent<RectTransform>().position = output;
@@ -90,6 +108,7 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        GetComponent<Image>().color = Color.white;
         if (PathHolder.instance && PathHolder.instance.Money >= Cost)
         {
             PathHolder.instance.RangeVisual.layer = 0;

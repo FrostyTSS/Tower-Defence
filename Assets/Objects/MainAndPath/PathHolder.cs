@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Yarn.Unity;
 using static BuffAttributes;
 
 public class PathHolder : MonoBehaviour // was intended to just hold the paths etc but then it turned into a manager lol
@@ -20,7 +21,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public bool WaveInProgress = false;
     public List<WaveInfo> WaveData;
     public Transform WaveSpawnpoint;
-     Vector3 StartPosition;
+     public Vector3 StartPosition;
     public int Round = 0;
     public bool RoundFinishedSpawning = true;
     public bool RoundCleared = false;
@@ -81,9 +82,11 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
 
     void Start()
     {
-
-        GetComponent<AudioSource>().clip = LevelManager.instance.CurrentLevel.LobbyTheme;
-        GetComponent<AudioSource>().Play();
+        if (LevelManager.instance)
+        {
+            GetComponent<AudioSource>().clip = LevelManager.instance.CurrentLevel.LobbyTheme;
+            GetComponent<AudioSource>().Play();
+        }
         if (AutoStartButton)
         {
             if (AutoRoundStart == true)
@@ -175,8 +178,22 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
               
                 RoundFinishedSpawning = false;
                 WaveInProgress = true;
-                
+
+           
+            if (WaveData[Round].DialogueToLoad != null && WaveData[Round].DialogueToLoad.Length > 0
+                && DialogueHolder.instance)
+            {
+                Debug.Log("MAKE SURE TO SPAWN ROUNDS IN VIA YARN AFTER!");
+                DialogueHolder.instance.DialogueRunner.GetComponent<DialogueRunner>().Stop();
+
+      
+                DialogueHolder.instance.DialogueRunner.GetComponent<DialogueRunner>().StartDialogue(WaveData[Round].DialogueToLoad);
+               
+            }
+            else
+            {
                 StartCoroutine("SpawnInEnemies");
+            }
             //}
             /*
             else
@@ -257,6 +274,8 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         RangeVisual.transform.localScale *= SelectedTower.Range * 2;
         RangeVisual.SetActive(true);
     }
+
+    [YarnCommand("SpawnWave")]
     IEnumerator SpawnInEnemies()
     {
         RoundCleared = false;

@@ -13,7 +13,24 @@ MonoBehaviour:
   m_Name: TestWave0
   m_EditorClassIdentifier: 
   WaveOrder:
+  - Enemy: {fileID: 647415822513163612, guid: 136601f5490f70443a00ab527d2a40f7, type: 3}
+    DelayUntilNextEnemyType: 20
+    AmountOfEnemy: 1
+    SwarmDelay: 0.1
   - Enemy: {fileID: 647415822513163612, guid: 5781e8f3ba897544fb3f963c30bbe7e8, type: 3}
-    DelayUntilNextEnemyType: 2
+    DelayUntilNextEnemyType: 50
     AmountOfEnemy: 10
     SwarmDelay: 1
+  - Enemy: {fileID: 647415822513163612, guid: 43d3238587f9d2a4ea0a2e7073a0aec9, type: 3}
+    DelayUntilNextEnemyType: 2
+    AmountOfEnemy: 2
+    SwarmDelay: 1
+  - Enemy: {fileID: 647415822513163612, guid: 759743f9bb2a01b4da594476260049a8, type: 3}
+    DelayUntilNextEnemyType: 0.1
+    AmountOfEnemy: 7
+    SwarmDelay: 0.1
+  - Enemy: {fileID: 647415822513163612, guid: 759743f9bb2a01b4da594476260049a8, type: 3}
+    DelayUntilNextEnemyType: 0.1
+    AmountOfEnemy: 7
+    SwarmDelay: 0.1
+  DialogueToLoad: 

@@ -1,0 +1,4 @@
+slow bool on bloons
+slower tower ref on bloons
+If slowdown is caused, ramp up to either normal speed or the slower tower speed
+add some sort of fire damage tick upgrade, and check incoming damage41

@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
+using System.Collections;
 
 public class BaseEnemy : MonoBehaviour
 {
@@ -8,7 +9,8 @@ public class BaseEnemy : MonoBehaviour
     public PathHolder PathManager;
     public int CurrentPath = 0;
     public float Health = 1;
-    public float Speed = 1;
+    public float MaxSpeed = 1;
+    public float CurrentSpeed = 0;
     public int MoneyOnDeath = 1;
     Vector3 TargetPosition = Vector3.zero;
     public int LayerID = 0;
@@ -16,11 +18,13 @@ public class BaseEnemy : MonoBehaviour
     public GameObject LastProjectile;
     bool ReachedEndOfTrack = false;
     public bool Targetable = false;
+    public bool Camo = false;
 
     public bool Lead = false;
     public AudioClip HitSound;
     public AudioClip DeathSound;
     public AudioClip GlanceSound;
+    
     //  public float SoundVolume = 0.75f;
 
 
@@ -31,7 +35,7 @@ public class BaseEnemy : MonoBehaviour
     void Start()
     {
         // AudioSource.PlayClipAtPoint(HitSound, this.transform.position, SoundVolume);
-       
+        CurrentSpeed = MaxSpeed;
         if (!PathManager)
         {
             PathManager = Component.FindAnyObjectByType<PathHolder>();
@@ -49,10 +53,15 @@ public class BaseEnemy : MonoBehaviour
 
         if (LevelManager.instance && LevelManager.instance.CurrentDifficulty)
         {
-            Speed += LevelManager.instance.CurrentDifficulty.BloonSpeedIncrease;
+            MaxSpeed += LevelManager.instance.CurrentDifficulty.BloonSpeedIncrease;
         }
     }
 
+
+    public void SetTarget(Vector3 Target)
+    {
+        TargetPosition = Target;
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -60,16 +69,18 @@ public class BaseEnemy : MonoBehaviour
         { 
         if (CurrentPath == 0)
         {
-            this.transform.position = Vector3.MoveTowards(this.transform.position, TargetPosition, (5 * Speed) * Time.deltaTime);
+            this.transform.position = Vector3.MoveTowards(this.transform.position, TargetPosition, (5 * CurrentSpeed) * Time.deltaTime);
         }
         else
         {
             
-            this.transform.position = Vector3.MoveTowards(this.transform.position, TargetPosition, Speed * Time.deltaTime);
+            this.transform.position = Vector3.MoveTowards(this.transform.position, TargetPosition, CurrentSpeed * Time.deltaTime);
         }
 
-            if (Vector3.Distance(transform.position, TargetPosition) < 0.001f)
+            if (Vector3.Distance(transform.position, TargetPosition) < 0.002f)
             {
+               // Debug.Log("PATHSWAP");
+               
                 // Swap the position of the cylinder.
                 CurrentPath++;
                 Targetable = true;
@@ -217,13 +228,42 @@ public class BaseEnemy : MonoBehaviour
 
             
             this.GetComponent<MeshRenderer>().material = LayerOrder.LayerPopOrder[LayerID].GetComponent<MeshRenderer>().sharedMaterial;
-            this.GetComponent<BaseEnemy>().Speed = LayerOrder.LayerPopOrder[LayerID].GetComponent<BaseEnemy>().Speed;
+            
+            this.GetComponent<BaseEnemy>().MaxSpeed = LayerOrder.LayerPopOrder[LayerID].GetComponent<BaseEnemy>().MaxSpeed;
+            if (CurrentSpeed >= MaxSpeed)
+            {
+                CurrentSpeed = MaxSpeed;
+            }
             this.GetComponent<BaseEnemy>().Lead = LayerOrder.LayerPopOrder[LayerID].GetComponent<BaseEnemy>().Lead;
 
         }
     }
 
-    public void KillEnemy()
+
+    public IEnumerator Slowdown(float NewSpeed)
+    {
+        Debug.Log("SLOW!");
+        CurrentSpeed = NewSpeed;
+        while (CurrentSpeed < MaxSpeed)
+        {
+            CurrentSpeed += 1f * Time.fixedDeltaTime;
+            yield return new WaitForSeconds(0.1f);
+        }
+        CurrentSpeed = MaxSpeed;
+
+    }
+
+    public IEnumerator SpeedUp(float NewSpeed, float Duration)
+    {
+        
+        CurrentSpeed = NewSpeed;
+        
+        yield return new WaitForSeconds(Duration);
+        CurrentSpeed = MaxSpeed;
+
+    }
+
+    public virtual void KillEnemy()
     {
         
             if (GetComponent<ParticleSystem>())

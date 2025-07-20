@@ -7,7 +7,7 @@ using UnityEngine;
 public class WaveInfo : ScriptableObject
 {
     public List<WaveGroupInfo> WaveOrder;
-
+    public string DialogueToLoad;
 }
 
 
@@ -22,4 +22,5 @@ public struct WaveGroupInfo
     //for spam, do later
       public int AmountOfEnemy;
     public float SwarmDelay;
+    
 }

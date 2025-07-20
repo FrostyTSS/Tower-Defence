@@ -1,0 +1,22 @@
+Shield/Blocker/Firewall tower DONE 
+Sucking Tower/File Shredder DONE
+Tesla Tower
+Crossbow Tower/ Folder Assesor DONE
+
+make upgrades for above and for other towers
+
+Dialogue Midlevel ( maybe import future cowboy walkaround?)
+Complete Reskin ( village > Updater, dart > Detector, Pin > Scanner, Sniper > Memory Editor)
+Split Paths
+Make paths Unplaceable DONE ?
+make tower icon red if unplaceable area DONE
+midlevel save
+difficulties cleared save
+
+detail what difficulties do
+
+rootkits as camo towers
+
+trojan as tanky enemy spawners
+
+rewrite FC ending before release
