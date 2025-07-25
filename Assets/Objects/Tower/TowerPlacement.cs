@@ -80,6 +80,7 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
         {
 
             int TowerLayerID = LayerMask.NameToLayer("Tower");
+            int WaterLayerID = LayerMask.NameToLayer("Water");
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
             RaycastHit hit;
@@ -87,9 +88,12 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
 
 
             //  if (Physics.Raycast(ray, out hit, 9999, GroundCheck))
-            if (Physics.Raycast(ray, out hit) && hit.transform.gameObject.layer == TowerLayerID)
+            if (Physics.Raycast(ray, out hit) )
             {
-                GetComponent<Image>().color = Color.red;
+                if (hit.transform.gameObject.layer == TowerLayerID || hit.transform.gameObject.layer == TowerLayerID)
+                {
+                    GetComponent<Image>().color = Color.red;
+                }
             }
             else
             {
@@ -129,29 +133,31 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
             */
 
             int TowerLayerID = LayerMask.NameToLayer("Tower");
-
+            int WaterLayerID = LayerMask.NameToLayer("Water");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
             RaycastHit hit;
             // ray.origin = GetComponent<RectTransform>().position;
            
 
             //  if (Physics.Raycast(ray, out hit, 9999, GroundCheck))
-            if (Physics.Raycast(ray, out hit) && hit.transform.gameObject.layer != TowerLayerID)
+            if (Physics.Raycast(ray, out hit))
             {
-               // Debug.Log(hit.transform.gameObject.layer + " + " + TowerLayerID);
-                Debug.DrawLine(ray.origin, hit.point, Color.red, 500);
-                //Debug.Log(hit.point);
-                //Instantiate (particle, hit.point, transform.rotation); // Create a particle if hit
-                PathHolder.instance.Money -= Cost;
-                PathHolder.instance.UpdateMoneyCounter();
-                GameObject TowerRef = Instantiate(TowerToSpawn, hit.point, Quaternion.Euler(PlacedTowerRotation));
-                if (!TowerRef.GetComponent<BaseTower>().LevelPath)
+                if (hit.transform.gameObject.layer != TowerLayerID || hit.transform.gameObject.layer != WaterLayerID)
                 {
-                    TowerRef.GetComponent<BaseTower>().LevelPath = PathHolder.instance; // get pathholder if missing
-                }
-                PathHolder.instance.PlacedTowers.Add(TowerRef.GetComponent<BaseTower>());
-                   
+                    // Debug.Log(hit.transform.gameObject.layer + " + " + TowerLayerID);
+                    Debug.DrawLine(ray.origin, hit.point, Color.red, 500);
+                    //Debug.Log(hit.point);
+                    //Instantiate (particle, hit.point, transform.rotation); // Create a particle if hit
+                    PathHolder.instance.Money -= Cost;
+                    PathHolder.instance.UpdateMoneyCounter();
+                    GameObject TowerRef = Instantiate(TowerToSpawn, hit.point, Quaternion.Euler(PlacedTowerRotation));
+                    if (!TowerRef.GetComponent<BaseTower>().LevelPath)
+                    {
+                        TowerRef.GetComponent<BaseTower>().LevelPath = PathHolder.instance; // get pathholder if missing
+                    }
+                    PathHolder.instance.PlacedTowers.Add(TowerRef.GetComponent<BaseTower>());
 
+                }
                 //   {
             }
         }

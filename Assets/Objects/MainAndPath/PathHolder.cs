@@ -288,6 +288,11 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 Enemies.Add(
                     Instantiate(WaveData[Round].WaveOrder[i].Enemy, StartPosition, Quaternion.identity).GetComponent<BaseEnemy>()
                     );
+                if (WaveData[Round].WaveOrder[i].EnemyCamo && Enemies[Enemies.Count - 1].CamoOverlay)
+                {
+                    Enemies[Enemies.Count - 1].Camo = true;
+                    Enemies[Enemies.Count - 1].CamoOverlay.SetActive(true);
+                }
             }
             else
             {
@@ -296,6 +301,11 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                     Enemies.Add(
                     Instantiate(WaveData[Round].WaveOrder[i].Enemy, StartPosition, Quaternion.identity).GetComponent<BaseEnemy>()
                     );
+                    if (WaveData[Round].WaveOrder[i].EnemyCamo && Enemies[Enemies.Count - 1].CamoOverlay)
+                    {
+                        Enemies[Enemies.Count - 1].Camo = true;
+                        Enemies[Enemies.Count - 1].CamoOverlay.SetActive(true);
+                    }
                     yield return new WaitForSeconds(WaveData[Round].WaveOrder[i].SwarmDelay);
                 }
             }

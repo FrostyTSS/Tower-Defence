@@ -19,6 +19,7 @@ public class BaseEnemy : MonoBehaviour
     bool ReachedEndOfTrack = false;
     public bool Targetable = false;
     public bool Camo = false;
+    public GameObject CamoOverlay;
 
     public bool Lead = false;
     public AudioClip HitSound;
@@ -214,7 +215,10 @@ public class BaseEnemy : MonoBehaviour
             ParticleSystem.MainModule main = ps.main;
 
             Debug.Log("CHANGE COLOUR");
-            main.startColor = this.GetComponent<MeshRenderer>().material.color;
+            if (this.GetComponent<MeshRenderer>())
+            {
+                main.startColor = this.GetComponent<MeshRenderer>().material.color;
+            }
             GetComponent<ParticleSystem>().Play();
             // can't  do this via the lower method. Why? Who knows.
             //  GetComponent<ParticleSystem>().main.startColor = this.GetComponent<MeshRenderer>().material.color;
@@ -226,9 +230,16 @@ public class BaseEnemy : MonoBehaviour
         if (LayerID >= 0)
         {
 
-            
-            this.GetComponent<MeshRenderer>().material = LayerOrder.LayerPopOrder[LayerID].GetComponent<MeshRenderer>().sharedMaterial;
-            
+            if (this.GetComponent<MeshRenderer>())
+            {
+                this.GetComponent<MeshRenderer>().material = LayerOrder.LayerPopOrder[LayerID].GetComponent<MeshRenderer>().sharedMaterial;
+            }
+
+            if (this.GetComponentInChildren<SpriteRenderer>() && LayerOrder.LayerPopOrder[LayerID].GetComponentInChildren<SpriteRenderer>())
+            {
+                this.GetComponentInChildren<SpriteRenderer>().sprite = LayerOrder.LayerPopOrder[LayerID].GetComponentInChildren<SpriteRenderer>().sprite;
+            }
+
             this.GetComponent<BaseEnemy>().MaxSpeed = LayerOrder.LayerPopOrder[LayerID].GetComponent<BaseEnemy>().MaxSpeed;
             if (CurrentSpeed >= MaxSpeed)
             {

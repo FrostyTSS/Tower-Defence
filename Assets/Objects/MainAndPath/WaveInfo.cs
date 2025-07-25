@@ -22,5 +22,6 @@ public struct WaveGroupInfo
     //for spam, do later
       public int AmountOfEnemy;
     public float SwarmDelay;
+    public bool EnemyCamo;
     
 }
