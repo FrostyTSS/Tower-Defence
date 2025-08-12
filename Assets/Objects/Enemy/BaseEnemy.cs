@@ -11,6 +11,7 @@ public class BaseEnemy : MonoBehaviour
     public float Health = 1;
     public float MaxSpeed = 1;
     public float CurrentSpeed = 0;
+    public float CurrentSpeedModifier = 1;
     public int MoneyOnDeath = 1;
     Vector3 TargetPosition = Vector3.zero;
     public int LayerID = 0;
@@ -18,6 +19,7 @@ public class BaseEnemy : MonoBehaviour
     public GameObject LastProjectile;
     bool ReachedEndOfTrack = false;
     public bool Targetable = false;
+    public bool CurrentlySlowed = false;
     public bool Camo = false;
     public GameObject CamoOverlay;
 
@@ -31,6 +33,7 @@ public class BaseEnemy : MonoBehaviour
 
     //do future damage like will, add up
     public int EnemyFutureDamage = 0;
+   
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -75,7 +78,8 @@ public class BaseEnemy : MonoBehaviour
         else
         {
             
-            this.transform.position = Vector3.MoveTowards(this.transform.position, TargetPosition, CurrentSpeed * Time.deltaTime);
+            this.transform.position = Vector3.MoveTowards(this.transform.position, TargetPosition, (CurrentSpeed * CurrentSpeedModifier) * Time.deltaTime);
+                this.transform.LookAt(TargetPosition);
         }
 
             if (Vector3.Distance(transform.position, TargetPosition) < 0.002f)
@@ -251,16 +255,78 @@ public class BaseEnemy : MonoBehaviour
     }
 
 
-    public IEnumerator Slowdown(float NewSpeed)
+
+   
+
+    public IEnumerator Slowdown(float NewSpeed, float TimeBeforeSpeedUp, float SpeedUpDuration)
     {
         Debug.Log("SLOW!");
-        CurrentSpeed = NewSpeed;
-        while (CurrentSpeed < MaxSpeed)
+        
+
+        if (CurrentlySlowed == false || CurrentlySlowed == true && NewSpeed < CurrentSpeed)
         {
-            CurrentSpeed += 1f * Time.fixedDeltaTime;
-            yield return new WaitForSeconds(0.1f);
+            CurrentSpeed = NewSpeed;
+            CurrentlySlowed = true;
+            float timeElapsed = 0;
+           
+
+          
+
+
+            yield return new WaitForSeconds(TimeBeforeSpeedUp);
+            if (timeElapsed < SpeedUpDuration)
+            {
+                CurrentSpeed = Mathf.Lerp(NewSpeed, MaxSpeed, timeElapsed / SpeedUpDuration);
+                timeElapsed += Time.deltaTime;
+            }
+            /*
+            while (CurrentSpeed < MaxSpeed)
+            {
+
+                CurrentSpeed += 1f * Time.fixedDeltaTime;
+                yield return new WaitForSeconds(0.1f);
+            }
+            */
+            
+            CurrentSpeed = MaxSpeed;
+            CurrentlySlowed = false;
         }
-        CurrentSpeed = MaxSpeed;
+
+    }
+
+    public IEnumerator PercentageSlowdown(float SpeedMod, float TimeBeforeSpeedUp, float SpeedUpDuration, BaseTower OwnerTower) // for anything long term, like glue. i think.
+    {
+       
+
+        if (CurrentlySlowed == false || CurrentlySlowed == true && SpeedMod < CurrentSpeedModifier)
+        {
+            CurrentSpeedModifier = SpeedMod;
+            CurrentlySlowed = true;
+            float timeElapsed = 0;
+
+           
+            
+
+
+
+            yield return new WaitForSeconds(TimeBeforeSpeedUp);
+            if (timeElapsed < SpeedUpDuration)
+            {
+                CurrentSpeedModifier = Mathf.Lerp(SpeedMod, 1, timeElapsed / SpeedUpDuration);
+                timeElapsed += Time.deltaTime;
+            }
+            /*
+            while (CurrentSpeed < MaxSpeed)
+            {
+
+                CurrentSpeed += 1f * Time.fixedDeltaTime;
+                yield return new WaitForSeconds(0.1f);
+            }
+            */
+
+            CurrentSpeedModifier = 1;
+            CurrentlySlowed = false;
+        }
 
     }
 

@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 //using static UnityEditor.Rendering.CameraUI;
 
-public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, IEndDragHandler
+public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     Vector3 OriginalHUDPosition;
@@ -23,11 +23,11 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
     void Start()
     {
 
-         if (!this.GetComponent<AudioSource>())
-            {
+        if (!this.GetComponent<AudioSource>())
+        {
             gameObject.AddComponent<AudioSource>();
             this.GetComponent<AudioSource>().volume = SoundVolume;
-            }
+        }
 
         //to do: main menu, pause (yikes), test autoround and flame pin upgrades.. or pin at all tbh.
 
@@ -44,11 +44,11 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
-   
+
 
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -73,7 +73,7 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
 
     public void OnDrag(PointerEventData data)
     {
-       
+
         RectTransformUtility.ScreenPointToWorldPointInRectangle(HolderCanvas.GetComponent<RectTransform>(), Input.mousePosition, HolderCanvas.GetComponent<Canvas>().worldCamera, out output);
 
         if (PathHolder.instance)
@@ -88,11 +88,15 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
 
 
             //  if (Physics.Raycast(ray, out hit, 9999, GroundCheck))
-            if (Physics.Raycast(ray, out hit) )
+            if (Physics.Raycast(ray, out hit))
             {
-                if (hit.transform.gameObject.layer == TowerLayerID || hit.transform.gameObject.layer == TowerLayerID)
+                if (hit.transform.gameObject.layer == TowerLayerID || hit.transform.gameObject.layer == WaterLayerID)
                 {
                     GetComponent<Image>().color = Color.red;
+                }
+                else
+                {
+                    GetComponent<Image>().color = Color.white;
                 }
             }
             else
@@ -101,49 +105,55 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
             }
 
 
-                PathHolder.instance.RangeVisual.transform.position = output;
+            PathHolder.instance.RangeVisual.transform.position = output;
             PathHolder.instance.RangeVisual.transform.localScale = Vector3.one;
             PathHolder.instance.RangeVisual.transform.localScale *= TowerToSpawn.GetComponent<BaseTower>().Range * 4; // diameter to range, multiplied due to UI scaling
             GetComponent<RectTransform>().position = output;
         }
 
-        
+
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         GetComponent<Image>().color = Color.white;
-        if (PathHolder.instance && PathHolder.instance.Money >= Cost)
+
+        int TowerLayerID = LayerMask.NameToLayer("Tower");
+        int WaterLayerID = LayerMask.NameToLayer("Water");
+        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
         {
-            PathHolder.instance.RangeVisual.layer = 0;
-            PathHolder.instance.RangeVisual.SetActive(false);
-            if (this.GetComponent<AudioSource>() && DropoffSound)
+            if (hit.transform.gameObject.layer != TowerLayerID && hit.transform.gameObject.layer != WaterLayerID)
             {
-                //this.GetComponent<AudioSource>().clip = PickupSound;
-                this.GetComponent<AudioSource>().PlayOneShot(DropoffSound);
-            }
 
-            //try for orthographic
-            /*var scrPoint : Vector3 = Vector3(x,y, 0);
-    var ray : Ray = Camera.main.ScreenPointToRay(scrPoint);
-    var hit : RaycastHit;
-    if (Physics.Raycast (ray, hit)) {
-    var hitPoint : Vector3 = hit.point;
-    }
-            */
-
-            int TowerLayerID = LayerMask.NameToLayer("Tower");
-            int WaterLayerID = LayerMask.NameToLayer("Water");
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
-            RaycastHit hit;
-            // ray.origin = GetComponent<RectTransform>().position;
-           
-
-            //  if (Physics.Raycast(ray, out hit, 9999, GroundCheck))
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.gameObject.layer != TowerLayerID || hit.transform.gameObject.layer != WaterLayerID)
+                if (PathHolder.instance && PathHolder.instance.Money >= Cost)
                 {
+                    PathHolder.instance.RangeVisual.layer = 0;
+                    PathHolder.instance.RangeVisual.SetActive(false);
+                    if (this.GetComponent<AudioSource>() && DropoffSound)
+                    {
+                        //this.GetComponent<AudioSource>().clip = PickupSound;
+                        this.GetComponent<AudioSource>().PlayOneShot(DropoffSound);
+                    }
+
+                    //try for orthographic
+                    /*var scrPoint : Vector3 = Vector3(x,y, 0);
+            var ray : Ray = Camera.main.ScreenPointToRay(scrPoint);
+            var hit : RaycastHit;
+            if (Physics.Raycast (ray, hit)) {
+            var hitPoint : Vector3 = hit.point;
+            }
+                    */
+
+
+                    // ray.origin = GetComponent<RectTransform>().position;
+
+
+                    //  if (Physics.Raycast(ray, out hit, 9999, GroundCheck))
+
                     // Debug.Log(hit.transform.gameObject.layer + " + " + TowerLayerID);
                     Debug.DrawLine(ray.origin, hit.point, Color.red, 500);
                     //Debug.Log(hit.point);
@@ -157,19 +167,22 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
                     }
                     PathHolder.instance.PlacedTowers.Add(TowerRef.GetComponent<BaseTower>());
 
+
+                    //   {
+
                 }
-                //   {
+                
+
             }
         }
         this.transform.SetParent(HolderObject, false);
-       // this.transform.parent = HolderObject;
-            GetComponent<RectTransform>().localPosition = OriginalHUDPosition;
+        // this.transform.parent = HolderObject;
+        GetComponent<RectTransform>().localPosition = OriginalHUDPosition;
         PathHolder.instance.RangeVisual.layer = 0;
         PathHolder.instance.RangeVisual.SetActive(false);
         PathHolder.instance.DraggingTower = false;
-
     }
-  
+}
 
     /*
     private void OnMouseDrag()
@@ -184,4 +197,4 @@ public class TowerPlacement : MonoBehaviour,  IDragHandler, IBeginDragHandler, I
         GetComponent<RectTransform>().position = OriginalHUDPosition;
     }
     */
-    }
+    

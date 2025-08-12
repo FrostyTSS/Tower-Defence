@@ -280,7 +280,7 @@ public class BaseTower : MonoBehaviour
                 //if ((CurrentTarget.IncomingDamage - (ProjectileList.Count + 1) * Damage) >= (0 - Damage))
                 
 
-                if (CurrentTarget.EnemyFutureDamage < CurrentTarget.Health && CurrentTarget.Health > 0 ) // if damage incoming is not enough to kill, and enemy is not already killed
+                if (CurrentTarget.EnemyFutureDamage < CurrentTarget.Health && CurrentTarget.Health > 0 && CheckEnemyTowerUnique(CurrentTarget) == false) // if damage incoming is not enough to kill, and enemy is not already killed
                 //   if ((CurrentTarget.Health - (ProjectileList.Count + 1) * Damage) >= (0 - Damage) ) // make sure you only use the amount of shots necessary to kill
                 {
                     if (ProjectileType.GetComponent<ProjectileBase>().Tracking)
@@ -345,7 +345,15 @@ public class BaseTower : MonoBehaviour
         }
     }
 
-   public virtual void FindEnemy()
+
+    public virtual bool CheckEnemyTowerUnique(BaseEnemy enemytocheck) // use this for special tower checks ie if slowed, don't shoot if a flamethrower tower
+    {
+       
+            return false;
+        
+    }
+
+    public virtual void FindEnemy()
     {
         /*
         for (int i = 0; i < ProjectileList.Count; i++)
@@ -376,14 +384,14 @@ public class BaseTower : MonoBehaviour
                     
                     for (int i = 0; i < LevelPath.Enemies.Count; i++)
                     {
-                        if (CurrentClosestEnemy == null && LevelPath.Enemies[i] != null && LevelPath.Enemies[i].Targetable == true && CheckCamoStatus(LevelPath.Enemies[i])) // inital enemy
+                        if (CurrentClosestEnemy == null && LevelPath.Enemies[i] != null && LevelPath.Enemies[i].Targetable == true && CheckCamoStatus(LevelPath.Enemies[i]) && CheckEnemyTowerUnique(LevelPath.Enemies[i]) == false) // inital enemy
                         {
                             CurrentClosestEnemy = LevelPath.Enemies[i];
 
 
                         }
 
-                        if (CurrentClosestEnemy != null && LevelPath.Enemies[i] != null && CheckCamoStatus(LevelPath.Enemies[i]))
+                        if (CurrentClosestEnemy != null && LevelPath.Enemies[i] != null && CheckCamoStatus(LevelPath.Enemies[i]) && CheckEnemyTowerUnique(LevelPath.Enemies[i]) == false)
                         {
                             Vector3 currentoffset = CurrentClosestEnemy.transform.position - transform.position;
                             float currentsqrLen = currentoffset.sqrMagnitude;
@@ -416,7 +424,7 @@ public class BaseTower : MonoBehaviour
 
                     for (int i = 0; i < LevelPath.Enemies.Count; i++)
                     {
-                        if (CurrentClosestEnemy == null && LevelPath.Enemies[i] != null && Vector3.Distance(this.transform.position, LevelPath.Enemies[i].transform.position) <= Range && LevelPath.Enemies[i].Targetable == true && CheckCamoStatus(LevelPath.Enemies[i]))
+                        if (CurrentClosestEnemy == null && LevelPath.Enemies[i] != null && Vector3.Distance(this.transform.position, LevelPath.Enemies[i].transform.position) <= Range && LevelPath.Enemies[i].Targetable == true && CheckCamoStatus(LevelPath.Enemies[i]) && CheckEnemyTowerUnique(LevelPath.Enemies[i]) == false)
                         {
                             CurrentClosestEnemy = LevelPath.Enemies[i];
                             break;
@@ -437,7 +445,7 @@ public class BaseTower : MonoBehaviour
 
                     for (int i = LevelPath.Enemies.Count - 1; i >= 0; i--)
                     {
-                        if (CurrentClosestEnemy == null && LevelPath.Enemies[i] != null && Vector3.Distance(this.transform.position, LevelPath.Enemies[i].transform.position) <= Range && LevelPath.Enemies[i].Targetable == true && CheckCamoStatus(LevelPath.Enemies[i]))
+                        if (CurrentClosestEnemy == null && LevelPath.Enemies[i] != null && Vector3.Distance(this.transform.position, LevelPath.Enemies[i].transform.position) <= Range && LevelPath.Enemies[i].Targetable == true && CheckCamoStatus(LevelPath.Enemies[i]) && CheckEnemyTowerUnique(LevelPath.Enemies[i]) == false)
                         {
                             CurrentClosestEnemy = LevelPath.Enemies[i];
                             break;

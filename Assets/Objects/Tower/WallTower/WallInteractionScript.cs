@@ -22,19 +22,25 @@ public class WallInteractionScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
-         if (other.gameObject.layer == EnemyLayerID && other.gameObject.GetComponent<BaseEnemy>().CurrentSpeed >= other.gameObject.GetComponent<BaseEnemy>().MaxSpeed && RemainingUses > 0)
-     //   if (other.gameObject.layer == EnemyLayerID)
+
+        if (other.GetComponent<BaseEnemy>())
         {
-            other.gameObject.GetComponent<BaseEnemy>().TakeDamage(1, OwningTower);
-            //  other.gameObject.GetComponent<BaseEnemy>().Slowdown(-1.0f);
-            other.gameObject.GetComponent<BaseEnemy>().StartCoroutine("Slowdown", 0.25f * other.gameObject.GetComponent<BaseEnemy>().MaxSpeed);
-            RemainingUses -= 1;
-            Debug.Log("Hit!");
-            if (RemainingUses <= 0)
+            BaseEnemy CollidingEnemy = other.GetComponent<BaseEnemy>();
+            Debug.Log(other.name);
+            if (other.gameObject.layer == EnemyLayerID && CollidingEnemy.CurrentSpeed >= CollidingEnemy.MaxSpeed && RemainingUses > 0)
+            //   if (other.gameObject.layer == EnemyLayerID)
             {
-                StartCoroutine(ShieldRecharge());
+                CollidingEnemy.TakeDamage(1, OwningTower);
+                //  other.gameObject.GetComponent<BaseEnemy>().Slowdown(-1.0f);
+                CollidingEnemy.StartCoroutine(CollidingEnemy.Slowdown(-1.0f, 1.5f, 1.0f));
+                RemainingUses -= 1;
+                Debug.Log("Hit!");
+                if (RemainingUses <= 0)
+                {
+                    StartCoroutine(ShieldRecharge());
+                }
             }
+
         }
     }
 

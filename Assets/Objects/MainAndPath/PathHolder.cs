@@ -125,7 +125,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         //StartNewRound();
     }
 
-
+   
     public void OnlyPlayAudioSourceWhenRoundOver(AudioSource SourceRef)
     {
         if (RoundFinishedSpawning == true)
@@ -155,7 +155,10 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public void ButtonStartNewRound()
     {
         Debug.Log("CLICK!");
-        StartCoroutine(FadeBetweenTracks(LevelManager.instance.CurrentLevel.RoundTheme));
+        if (LevelManager.instance)
+        {
+            StartCoroutine(FadeBetweenTracks(LevelManager.instance.CurrentLevel.RoundTheme));
+        }
         StartNewRound();
     }
      void StartNewRound()
@@ -248,7 +251,8 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             ShowUpgradeUI(true);
                 Debug.Log("Selected!");
             }
-            else if (SelectedTower)
+         //   else if (SelectedTower)
+         else if (SelectedTower)
             {
             RangeVisual.SetActive(false);
             SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().material = SelectedTowerMat;
@@ -573,9 +577,23 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         yield return new WaitForSeconds(0.25f);
     }
 
-        // Update is called once per frame
-        void Update()
+    // Update is called once per frame
+    void Update()
     {
-      
+        if (Input.GetKeyDown(KeyCode.Mouse0) && SelectedTower)
+        {
+            Debug.Log("Click");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
+            RaycastHit hit;
+            int TowerLayerID = LayerMask.NameToLayer("Tower");
+          //  int WaterLayerID = LayerMask.NameToLayer("Water");
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.gameObject.layer != TowerLayerID)
+                {
+                    PathHolder.instance.SelectTower(this.gameObject);
+                }
+            }
+        }
     }
 }
