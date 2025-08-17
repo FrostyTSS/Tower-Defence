@@ -32,7 +32,7 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
         //to do: main menu, pause (yikes), test autoround and flame pin upgrades.. or pin at all tbh.
 
         OriginalHUDPosition = GetComponent<RectTransform>().localPosition;
-        OriginalHUDPosition.x += 100; // It spawns offset to the side for.. reasons. So We offset it BACK!
+        //OriginalHUDPosition.x += 100; // It spawns offset to the side for.. reasons. So We offset it BACK!
         transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().sprite = TowerToSpawn.GetComponentInChildren<SpriteRenderer>().sprite;
         HolderObject = this.transform.parent; //oh, you can't ignore the horizontal mask, jank time.
 

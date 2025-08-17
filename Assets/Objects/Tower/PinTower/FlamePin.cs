@@ -5,6 +5,7 @@ using UnityEngine;
 public class FlamePin : UpgradeEffect
 {
     public GameObject FireProjectile;
+    public Sprite NewTowerLook;
     /*
     public override void OnFire(BaseTower TowerRef)
     {
@@ -18,6 +19,7 @@ public class FlamePin : UpgradeEffect
         {
             PinRef.ProjectileAmount = 32;
             PinRef.TimeBetweenShots *= 0.55f;
+            PinRef.GetComponentInChildren<SpriteRenderer>().sprite = NewTowerLook;
             
         }
     }

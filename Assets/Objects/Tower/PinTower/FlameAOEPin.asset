@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: FlameAOEPin
   m_EditorClassIdentifier: 
   FireProjectile: {fileID: 428160056894756163, guid: 89542a13761e19245bd6b0278c4003db, type: 3}
+  NewTowerLook: {fileID: 21300000, guid: 984cefe3b7342cd41ba5bbdfad5ae7f4, type: 3}

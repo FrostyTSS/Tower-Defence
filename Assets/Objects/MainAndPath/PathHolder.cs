@@ -161,7 +161,22 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         }
         StartNewRound();
     }
-     void StartNewRound()
+
+
+    [YarnCommand("FinishPreroundChat")]
+
+    public void StartEnemySpawningCoroutine()
+    {
+        DialogueHolder.instance.NPCPortrait.SetActive(false);
+        DialogueHolder.instance.PlayerPortrait.SetActive(false);
+        if (DialogueHolder.instance.BackgroundImage)
+        {
+            DialogueHolder.instance.BackgroundImage.SetActive(false);
+        }
+        StartCoroutine("SpawnInEnemies");
+    }
+
+    void StartNewRound()
     {
 
         UpdateRoundCounter();
@@ -188,8 +203,12 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             {
                 Debug.Log("MAKE SURE TO SPAWN ROUNDS IN VIA YARN AFTER!");
                 DialogueHolder.instance.DialogueRunner.GetComponent<DialogueRunner>().Stop();
-
-      
+                DialogueHolder.instance.PlayerPortrait.SetActive(true);
+                DialogueHolder.instance.NPCPortrait.SetActive(true);
+                if (DialogueHolder.instance.BackgroundImage)
+                {
+                    DialogueHolder.instance.BackgroundImage.SetActive(true);
+                }
                 DialogueHolder.instance.DialogueRunner.GetComponent<DialogueRunner>().StartDialogue(WaveData[Round].DialogueToLoad);
                
             }
@@ -331,6 +350,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         {
 
             enemytodelete.GetComponent<MeshRenderer>().enabled = false;
+            enemytodelete.GetComponentInChildren<SpriteRenderer>().enabled = false;
             enemytodelete.GetComponent<BaseEnemy>().enabled = false;
 
             if (enemytodelete.GetComponent<BaseEnemy>().DeathSound && enemytodelete.GetComponent<AudioSource>())

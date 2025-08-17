@@ -1,6 +1,8 @@
 Shield/Blocker/Firewall tower DONE 
 Sucking Tower/File Shredder DONE
-Tesla Tower
+Tesla Tower 
+File Nuker
+Flamethrower Tower DONE
 Crossbow Tower/ Folder Assesor DONE
 
 make upgrades for above and for other towers
@@ -17,7 +19,9 @@ detail what difficulties do
 
 rootkits as camo towers
 
+add levels from sketchbook
+
 trojan as tanky enemy spawners
 
-rewrite FC ending before release
-readd water noises, previous one wouldn't fit on git
+rewrite FC ending before release DONE
+readd water noises, previous one wouldn't fit on git DONE

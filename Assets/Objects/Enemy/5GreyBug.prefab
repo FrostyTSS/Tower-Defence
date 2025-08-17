@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 6867245429202912237}
   - component: {fileID: -3865636617218212027}
   m_Layer: 3
-  m_Name: RedBug
+  m_Name: 5GreyBug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,14 +129,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PathManager: {fileID: 0}
   CurrentPath: 0
-  Health: 1
-  MaxSpeed: 1
+  Health: 5
+  MaxSpeed: 8
   CurrentSpeed: 0
+  CurrentSpeedModifier: 1
   MoneyOnDeath: 1
   LayerID: 0
   LayerOrder: {fileID: 11400000, guid: 87481ff0d8ddb7a48b6def865887ca64, type: 2}
   LastProjectile: {fileID: 0}
   Targetable: 0
+  CurrentlySlowed: 0
   Camo: 0
   CamoOverlay: {fileID: 2661122350431352604}
   Lead: 0
@@ -5231,7 +5233,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: 6a35df45d3b3ab74ebf7a28a81244cf1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7e33bcf29d312204dbbfa8816aa7dd22, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

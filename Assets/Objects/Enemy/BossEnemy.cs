@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
+using System.Collections;
 using System.Collections.Generic;
 
 public class BossEnemy : BaseEnemy
@@ -28,13 +29,23 @@ public class BossEnemy : BaseEnemy
         PathManager.UpdateMoneyCounter();
         PathManager.RemoveEnemies(gameObject); // kill here to properly count enemies
 
-       
+
+        StartCoroutine("BossEnemySpawn");
+    }
+
+
+
+
+    IEnumerator BossEnemySpawn()
+    {
         for (int i = 0; i < EnemiesToSpawnOnDefeat.Count; i++)
         {
             PathManager.Enemies.Add(
                     Instantiate(EnemiesToSpawnOnDefeat[i], PathManager.StartPosition, Quaternion.identity).GetComponent<BaseEnemy>()
                     );
+            yield return new WaitForSeconds(0.25f);
         }
+        // Code goes here!
     }
 
 }

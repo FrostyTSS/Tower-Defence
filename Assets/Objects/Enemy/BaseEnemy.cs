@@ -228,6 +228,9 @@ public class BaseEnemy : MonoBehaviour
             //  GetComponent<ParticleSystem>().main.startColor = this.GetComponent<MeshRenderer>().material.color;
         }
 
+
+        PathManager.Money += LayerOrder.LayerPopOrder[LayerID].GetComponent<BaseEnemy>().MoneyOnDeath;
+        PathManager.UpdateMoneyCounter();
         LayerID -= 1;
         
 
@@ -249,6 +252,8 @@ public class BaseEnemy : MonoBehaviour
             {
                 CurrentSpeed = MaxSpeed;
             }
+
+            
             this.GetComponent<BaseEnemy>().Lead = LayerOrder.LayerPopOrder[LayerID].GetComponent<BaseEnemy>().Lead;
 
         }
