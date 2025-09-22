@@ -187,7 +187,7 @@ public class BaseEnemy : MonoBehaviour
                     TargetingTower.FindEnemy();
 
                 }
-                else if (Health > 0 && LayerOrder && LayerID < LayerOrder.LayerPopOrder.Count)
+                else if (Health > 0 && LayerOrder && LayerID < LayerOrder.LayerPopOrder.Count && IncomingDamage > 0) //NEED A SQUELCH SOUND FOR QUARINTINER OR SOMETHING
                 {
                     if (HitSound && GetComponent<AudioSource>())
                     {

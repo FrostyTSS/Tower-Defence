@@ -291,6 +291,7 @@ public class BaseTower : MonoBehaviour
                     if (RotateToShoot)
                     {
                         transform.LookAt(CurrentTarget.transform);
+                        transform.eulerAngles = new Vector3(0, transform.rotation.eulerAngles.y, 0);
                     }
                    // Quaternion RotatedForwardQ = Quaternion.LookRotation(TowerRef.CurrentTarget.transform.position - TowerRef.transform.position);
                     ProjectileList.Add(Instantiate(ProjectileType, transform.position, Quaternion.LookRotation(CurrentTarget.transform.position - transform.position)).GetComponent<ProjectileBase>());

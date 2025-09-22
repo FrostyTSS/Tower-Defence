@@ -25,5 +25,5 @@ MonoBehaviour:
     DifficultyClear: 0
   - Difficulty: {fileID: 11400000, guid: 777f80ac05f2968449943de02bc615fa, type: 2}
     DifficultyClear: 0
-  LobbyTheme: {fileID: 8300000, guid: ca5c5b13cb4c2c445b1919212aeb88e7, type: 3}
-  RoundTheme: {fileID: 8300000, guid: 2ec343a7e4048c847b233eec2c6890f7, type: 3}
+  LobbyTheme: {fileID: 8300000, guid: c2d9dd72defee984e8822d3e6d5a6744, type: 3}
+  RoundTheme: {fileID: 8300000, guid: a79da7dc554c716479351b60f7fff53e, type: 3}
