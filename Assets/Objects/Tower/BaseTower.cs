@@ -32,7 +32,8 @@ public class BaseTower : MonoBehaviour
     public int BasePierce = 0; // see comment in projectilebase.cs
     public bool Searching = false;
     public bool ManualTarget = false;
-    public Vector3 ManualTargetPos = Vector2.zero;
+    public Vector3 ManualTargetPos = Vector3.zero;
+    public Vector2 ManualTargetPosUI = Vector2.zero;
     public bool CanSeeCamo = false;
     public float TimeBetweenShots = 1;
     public bool AutoProjectileCleanup = true; // turn off for long lasting AOE attacks using projectiles, such as the pin tower.
@@ -56,6 +57,8 @@ public class BaseTower : MonoBehaviour
         LevelPath.SelectTower(this.gameObject);
     }
 
+   
+
     void OnDrawGizmosSelected()
     {
         // Draw a yellow sphere at the transform's position
@@ -65,8 +68,9 @@ public class BaseTower : MonoBehaviour
 
     void Start()
     {
-
+        
         ManualTargetPos = this.transform.position;
+        ManualTargetPosUI = Camera.main.WorldToScreenPoint(ManualTargetPos);
         if (!LevelPath)
         {
             LevelPath = PathHolder.instance; // get pathholder if missing

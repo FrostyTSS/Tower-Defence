@@ -15,6 +15,11 @@ using static BuffAttributes;
 public class PathHolder : MonoBehaviour // was intended to just hold the paths etc but then it turned into a manager lol
 {
 
+
+    //TO FIX:
+    //random offset when manual targeting with the range overlay
+
+
     public static PathHolder instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public List<Vector3> Positions;
@@ -290,9 +295,11 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             {
                 AimTargetVisual.SetActive(true);
                 AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(0);
-                CheckTargetRange();
-                AimTargetVisual.transform.position = new Vector3(SelectedTower.ManualTargetPos.x, SelectedTower.transform.position.y + 5, SelectedTower.ManualTargetPos.z);
-               
+                CheckTargetRangeOnce();
+                
+                AimTargetVisual.GetComponent<RectTransform>().position = SelectedTower.ManualTargetPosUI;
+                //AimTargetVisual.transform.position = new Vector3(SelectedTower.ManualTargetPos.x, SelectedTower.transform.position.y + 5, SelectedTower.ManualTargetPos.z);
+
             }
             else
             {
@@ -326,7 +333,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         RangeVisual.SetActive(false);
         RangeVisual.transform.position = SelectedObject.transform.position;
         RangeVisual.transform.localScale = Vector3.one;
-        RangeVisual.transform.localScale *= SelectedTower.Range * 2;
+        RangeVisual.transform.localScale *= SelectedTower.Range * 1.80f;
         RangeVisual.SetActive(true);
     }
 
@@ -676,24 +683,27 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     {
 
          //AimTargetVisual.transform.position = new Vector3(hit.point.x, SelectedTower.transform.position.y + 2, hit.point.z);
-         Vector3 Point = new Vector3(hit.point.x, 2, hit.point.z);
+         Vector3 Point = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
         AimTargetVisual.GetComponent<RectTransform>().position = Input.mousePosition;
         //AimTargetVisual.GetComponent<RectTransform>().position = Input.mousePosition;
         // if (Vector3.Distance(SelectedTower.transform.position, AimTargetVisual.transform.position) > SelectedTower.GetComponent<BaseTower>().Range)
         if (Vector3.Distance(SelectedTower.transform.position, Point) > SelectedTower.GetComponent<BaseTower>().Range)
         {
+            Cursor.SetCursor(AimTargetVisual.GetComponent<TargetSprite>().BadTarget.texture, Vector2.zero, CursorMode.ForceSoftware);
             AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(1);
-            Debug.Log("OUTTA RANGE");
+            Debug.Log("OUTTA RANGE: " + Vector3.Distance(SelectedTower.transform.position, Point) + " and the z hit is" + hit.point.z);
         }
         else
         {
+            Cursor.SetCursor(AimTargetVisual.GetComponent<TargetSprite>().GoodTarget.texture, Vector2.zero, CursorMode.ForceSoftware);
             AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(0);
             Debug.Log("WITHIN RANGE");
             SelectedTower.ManualTargetPos = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
+            SelectedTower.ManualTargetPosUI = Input.mousePosition; 
         }
     }
 
-    public void CheckTargetRange()
+    public void CheckTargetRangeOnce()
     {
         //AimTargetVisual.transform.position = new Vector3(hit.point.x, SelectedTower.transform.position.y + 2, hit.point.z);
         // AimTargetVisual.transform.position = Input.mousePosition;
@@ -703,11 +713,14 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         Vector3 Point = new Vector3(SelectedTower.ManualTargetPos.x, SelectedTower.transform.position.y, SelectedTower.ManualTargetPos.z);
         if (Vector3.Distance(SelectedTower.transform.position, Point) > SelectedTower.Range)
         {
+            Cursor.SetCursor(AimTargetVisual.GetComponent<TargetSprite>().BadTarget.texture, Vector2.zero, CursorMode.ForceSoftware);
+           
             AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(1);
             Debug.Log("OUTTA RANGE");
         }
         else
         {
+            Cursor.SetCursor(AimTargetVisual.GetComponent<TargetSprite>().GoodTarget.texture, Vector2.zero, CursorMode.ForceSoftware);
             AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(0);
             Debug.Log("WITHIN RANGE");
             //SelectedTower.ManualTargetPos = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
@@ -723,7 +736,8 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
             RaycastHit hit;
             int TowerLayerID = LayerMask.NameToLayer("Tower");
-          //  int WaterLayerID = LayerMask.NameToLayer("Water");
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            //  int WaterLayerID = LayerMask.NameToLayer("Water");
             if (Physics.Raycast(ray, out hit))
             {
                 if (hit.transform.gameObject.layer != TowerLayerID)
@@ -765,12 +779,15 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 //     PathHolder.instance.SelectTower(this.gameObject);
                 // }
             }
+           
 
 
         }
         else
         {
-        //    AimTargetVisual.SetActive(false);
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+
+           // AimTargetVisual.SetActive(false);
         }
     }
 }
