@@ -8,6 +8,7 @@ public class BaseEnemy : MonoBehaviour
     
     public PathHolder PathManager;
     public int CurrentPath = 0;
+    public float MaxHealth = 1;
     public float Health = 1;
     public float MaxSpeed = 1;
     public float CurrentSpeed = 0;
@@ -59,6 +60,8 @@ public class BaseEnemy : MonoBehaviour
         {
             MaxSpeed += LevelManager.instance.CurrentDifficulty.BloonSpeedIncrease;
         }
+
+        Health = MaxHealth;
     }
 
 
@@ -88,6 +91,7 @@ public class BaseEnemy : MonoBehaviour
                
                 // Swap the position of the cylinder.
                 CurrentPath++;
+                
                 Targetable = true;
                 if (CurrentPath >= PathManager.Positions.Count)
                 {
@@ -104,6 +108,7 @@ public class BaseEnemy : MonoBehaviour
                 {
                     TargetPosition = PathManager.Positions[CurrentPath];
                 }
+                OnNewPoint();
             }
             
         }
@@ -120,8 +125,10 @@ public class BaseEnemy : MonoBehaviour
 
         if (Lead == false || TargetingTower.ProjectileType && TargetingTower.ProjectileType.GetComponent<ProjectileBase>().LeadBreaking == true && Lead == true)
         {
+            OnTakeDamage(ProjectileDamage, TargetingTower);
             Health -= ProjectileDamage;
             EnemyFutureDamage -= ProjectileDamage;
+          
             //if (EnemyFutureDamage < 0)
             //{
             //    EnemyFutureDamage = 0;
@@ -365,5 +372,17 @@ public class BaseEnemy : MonoBehaviour
             PathManager.UpdateMoneyCounter();
             PathManager.RemoveEnemies(gameObject); // kill here to properly count enemies
      }
-    
+
+    public virtual void OnNewPoint()
+    {
+
+        
+    }
+
+    public virtual void OnTakeDamage(int ProjectileDamage, BaseTower TargetingTower)
+    {
+
+
+    }
+
 }

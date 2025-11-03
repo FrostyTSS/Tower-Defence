@@ -6,14 +6,30 @@ position: -77,-58
 
 
 ???:TEST
-
+<<jump LizEdFirst>>
 ???: Hello, fellow cowboy. 
-<<spriteswap EvilGuySprite 2>>
+//<<spriteswap EvilGuySprite 2>>
 ???: Did you just come out of that bar? I heard rumours about a mysterious death in there a few minutes ago. 
 <<FinishPreroundChat MainManager>>
 
 ===
+title: LizEdFirst
+tags:
+position: -77,-58
+---
 
+<<SpriteSwap LeftSideSprite 0>>
+Elizabeth: Do I really have to do this? I'm more of an engineer then a programmer, y'know..
+<<ChangeTypewriterSpeed DialogueSystem 20>>
+Elizabeth: Plus, why *this* law firm? Just 'cause they bruised your ego or..?
+<<SpriteSwap LeftSideSprite 1>>
+
+???: Hello, fellow cowboy. 
+//<<spriteswap EvilGuySprite 2>>
+???: Did you just come out of that bar? I heard rumours about a mysterious death in there a few minutes ago. 
+<<FinishPreroundChat MainManager>>
+
+===
 
 
 

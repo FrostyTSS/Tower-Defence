@@ -6,6 +6,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Yarn.Unity;
@@ -36,8 +37,11 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
 
     public BaseTower SelectedTower;
     public GameObject RangeVisual;
-    public Material GlowMat;
-    Material SelectedTowerMat;
+    public GameObject AimTargetVisual;
+    public Color GlowColour;
+   // public Material GlowMat;
+    
+    //Material SelectedTowerMat;
     public List<BaseTower> PlacedTowers;
 
     public TextMeshProUGUI HPText;
@@ -50,7 +54,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
 
 
  
-    public float ThemeFadeTime = 2.0f;
+    public float ThemeFadeTime = 1.25f;
      bool Fading = false;
 
 
@@ -61,7 +65,10 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
  
     public VictoryScreenScript WinScript;
     public GameObject FailureScreen;
-   
+
+    public int CurrentLobbyTheme = 0;
+    public int CurrentRoundTheme = 1;
+        public int CurrentChatTheme = 0;
 
     //do before everything else
     private void Awake()
@@ -82,9 +89,21 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
 
     void Start()
     {
+            
+        //to do: make a permanent variable instead of spamming instances..
+
         if (LevelManager.instance)
         {
-            GetComponent<AudioSource>().clip = LevelManager.instance.CurrentLevel.LobbyTheme;
+            if (LevelManager.instance.CurrentLevel)
+            {
+                CurrentLobbyTheme = LevelManager.instance.CurrentLevel.StartingLobbyTheme;
+                CurrentRoundTheme = LevelManager.instance.CurrentLevel.StartingRoundTheme;
+                CurrentChatTheme = LevelManager.instance.CurrentLevel.StartingRoundTheme;
+            }
+
+            
+
+            GetComponent<AudioSource>().clip = LevelManager.instance.MusicList[CurrentLobbyTheme];
             GetComponent<AudioSource>().Play();
         }
         if (AutoStartButton)
@@ -155,10 +174,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public void ButtonStartNewRound()
     {
         Debug.Log("CLICK!");
-        if (LevelManager.instance)
-        {
-            StartCoroutine(FadeBetweenTracks(LevelManager.instance.CurrentLevel.RoundTheme));
-        }
+        
         StartNewRound();
     }
 
@@ -167,12 +183,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
 
     public void StartEnemySpawningCoroutine()
     {
-        DialogueHolder.instance.NPCPortrait.SetActive(false);
-        DialogueHolder.instance.PlayerPortrait.SetActive(false);
-        if (DialogueHolder.instance.BackgroundImage)
-        {
-            DialogueHolder.instance.BackgroundImage.SetActive(false);
-        }
+        DialogueHolder.instance.KillPortraits();
         StartCoroutine("SpawnInEnemies");
     }
 
@@ -202,14 +213,21 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 && DialogueHolder.instance)
             {
                 Debug.Log("MAKE SURE TO SPAWN ROUNDS IN VIA YARN AFTER!");
-                DialogueHolder.instance.DialogueRunner.GetComponent<DialogueRunner>().Stop();
+                DialogueHolder.instance.DialogueRunnerScript.Stop();
+                /*
                 DialogueHolder.instance.PlayerPortrait.SetActive(true);
                 DialogueHolder.instance.NPCPortrait.SetActive(true);
                 if (DialogueHolder.instance.BackgroundImage)
                 {
                     DialogueHolder.instance.BackgroundImage.SetActive(true);
                 }
-                DialogueHolder.instance.DialogueRunner.GetComponent<DialogueRunner>().StartDialogue(WaveData[Round].DialogueToLoad);
+                */
+                if (LevelManager.instance)
+                {
+                    StartCoroutine(FadeBetweenTracks(LevelManager.instance.MusicList[CurrentChatTheme]));
+                }
+                DialogueHolder.instance.EnablePortraits();
+                DialogueHolder.instance.DialogueRunnerScript.StartDialogue(WaveData[Round].DialogueToLoad);
                
             }
             else
@@ -263,10 +281,23 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             {
            
             SelectedTower = SelectedObject.GetComponent<BaseTower>();
-                SelectedTowerMat = SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().material;
-                SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().material = GlowMat;
+                //SelectedTowerMat = SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().material;
+                SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().color = GlowColour;
             
             InitRangeVisual(SelectedObject);
+           
+            if (SelectedTower.ManualTarget)
+            {
+                AimTargetVisual.SetActive(true);
+                AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(0);
+                CheckTargetRange();
+                AimTargetVisual.transform.position = new Vector3(SelectedTower.ManualTargetPos.x, SelectedTower.transform.position.y + 5, SelectedTower.ManualTargetPos.z);
+               
+            }
+            else
+            {
+                AimTargetVisual.SetActive(false);
+            }
             ShowUpgradeUI(true);
                 Debug.Log("Selected!");
             }
@@ -274,12 +305,13 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
          else if (SelectedTower)
             {
             RangeVisual.SetActive(false);
-            SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().material = SelectedTowerMat;
-                SelectedTowerMat = null;
+            SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+              //  SelectedTowerMat = null;
                 SelectedTower = null;
             ShowUpgradeUI(false);
             Debug.Log("Unselected!");
-            }
+            AimTargetVisual.SetActive(false);
+        }
             
 
             //   {
@@ -301,6 +333,12 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     [YarnCommand("SpawnWave")]
     IEnumerator SpawnInEnemies()
     {
+
+
+        if (LevelManager.instance)
+        {
+            StartCoroutine(FadeBetweenTracks(LevelManager.instance.MusicList[CurrentRoundTheme]));
+        }
         RoundCleared = false;
         yield return new WaitForSeconds(1.25f); // delay just incase lol
         for (int i = 0; i < WaveData[Round].WaveOrder.Count; i++)
@@ -465,7 +503,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                          }
                              else
                          {
-                    StartCoroutine(FadeBetweenTracks(LevelManager.instance.CurrentLevel.LobbyTheme));
+                    StartCoroutine(FadeBetweenTracks(LevelManager.instance.MusicList[CurrentLobbyTheme]));
                          }
                    }
                 else
@@ -563,9 +601,40 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     }
 
 
+    [YarnCommand("MusicSwap")]
+    public void MusicSwap(int TypeOfMus, int MusID) // 0 for lobby, 1 for round, 2 for chat
+    {
+
+        if (MusID >= 0 && MusID < LevelManager.instance.MusicList.Count)
+        {
+            switch (TypeOfMus)
+            {
+                case 0:
+                    CurrentLobbyTheme = MusID;
+                    break;
+                case 1:
+                    CurrentRoundTheme = MusID;
+                    break;
+                case 2:
+                    CurrentChatTheme = MusID;
+                    break;
+
+
+                default:
+                    break;
+            }
+
+
+            StartCoroutine(FadeBetweenTracks(LevelManager.instance.MusicList[MusID]));
+        }
+
+        
+    }
+
+
     IEnumerator FadeBetweenTracks(AudioClip ClipToSwapTo)
     {
-        if (this.GetComponent<AudioSource>() && Fading == false && LevelManager.instance.CurrentLevel.LobbyTheme && LevelManager.instance.CurrentLevel.RoundTheme)
+        if (this.GetComponent<AudioSource>() && Fading == false && LevelManager.instance.MusicList.Count > 0)
         {
             Fading = true;
             AudioSource ManagerSource = this.GetComponent<AudioSource>();
@@ -597,10 +666,58 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         yield return new WaitForSeconds(0.25f);
     }
 
+
+    public void EnableManualTargeting(BaseTower TowerToEnable)
+    {
+
+    }
+
+    public void SetTargetColourAndPos(RaycastHit hit)
+    {
+
+         //AimTargetVisual.transform.position = new Vector3(hit.point.x, SelectedTower.transform.position.y + 2, hit.point.z);
+         Vector3 Point = new Vector3(hit.point.x, 2, hit.point.z);
+        AimTargetVisual.GetComponent<RectTransform>().position = Input.mousePosition;
+        //AimTargetVisual.GetComponent<RectTransform>().position = Input.mousePosition;
+        // if (Vector3.Distance(SelectedTower.transform.position, AimTargetVisual.transform.position) > SelectedTower.GetComponent<BaseTower>().Range)
+        if (Vector3.Distance(SelectedTower.transform.position, Point) > SelectedTower.GetComponent<BaseTower>().Range)
+        {
+            AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(1);
+            Debug.Log("OUTTA RANGE");
+        }
+        else
+        {
+            AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(0);
+            Debug.Log("WITHIN RANGE");
+            SelectedTower.ManualTargetPos = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
+        }
+    }
+
+    public void CheckTargetRange()
+    {
+        //AimTargetVisual.transform.position = new Vector3(hit.point.x, SelectedTower.transform.position.y + 2, hit.point.z);
+        // AimTargetVisual.transform.position = Input.mousePosition;
+        //AimTargetVisual.GetComponent<RectTransform>().position = Input.mousePosition;
+        // if (Vector3.Distance(SelectedTower.transform.position, AimTargetVisual.transform.position) > SelectedTower.GetComponent<BaseTower>().Range)
+        // Vector3 Point = new Vector3(hit.point.x, SelectedTower.transform.position.y + 2, hit.point.z);
+        Vector3 Point = new Vector3(SelectedTower.ManualTargetPos.x, SelectedTower.transform.position.y, SelectedTower.ManualTargetPos.z);
+        if (Vector3.Distance(SelectedTower.transform.position, Point) > SelectedTower.Range)
+        {
+            AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(1);
+            Debug.Log("OUTTA RANGE");
+        }
+        else
+        {
+            AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(0);
+            Debug.Log("WITHIN RANGE");
+            //SelectedTower.ManualTargetPos = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && SelectedTower)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && SelectedTower) // if clicked off tower reset?
         {
             Debug.Log("Click");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
@@ -614,6 +731,46 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                     PathHolder.instance.SelectTower(this.gameObject);
                 }
             }
+        }
+
+        if (Input.GetKey(KeyCode.Mouse1) && SelectedTower && AimTargetVisual.activeSelf) // for manual target. LOOK INTO SWAPPING FROM OBJECT TO CURSOR.
+        {
+            Debug.Log("Target");
+            
+            
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
+            RaycastHit hit;
+            //int TowerLayerID = LayerMask.NameToLayer("Tower");
+            //  int WaterLayerID = LayerMask.NameToLayer("Water");
+            if (Physics.Raycast(ray, out hit))
+            {
+                Debug.DrawRay(ray.origin, ray.direction, Color.red, 1);
+                SetTargetColourAndPos(hit);
+                /*
+                AimTargetVisual.transform.position = new Vector3(hit.point.x, SelectedTower.transform.position.y + 2, hit.point.z);
+                if (Vector3.Distance(SelectedTower.transform.position, AimTargetVisual.transform.position) > SelectedTower.GetComponent<BaseTower>().Range)
+                {
+                    AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(1);
+                    Debug.Log("OUTTA RANGE");
+                }
+                else
+                {
+                    AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(0);
+                    Debug.Log("WITHIN RANGE");
+                    SelectedTower.ManualTargetPos = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
+                }
+                */
+                //if (hit.transform.gameObject.layer != TowerLayerID)
+                // {
+                //     PathHolder.instance.SelectTower(this.gameObject);
+                // }
+            }
+
+
+        }
+        else
+        {
+        //    AimTargetVisual.SetActive(false);
         }
     }
 }

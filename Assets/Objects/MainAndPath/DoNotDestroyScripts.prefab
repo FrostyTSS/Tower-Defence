@@ -44,6 +44,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f20cc1c25cafd842a9bd87a812c5097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MainMenuSceneName: MainMenuScene
   GlobalLevelList:
   - {fileID: 11400000, guid: ecf137a0af2d3ed4b88e55a019a39a1a, type: 2}
   CurrentLevel: {fileID: 11400000, guid: ecf137a0af2d3ed4b88e55a019a39a1a, type: 2}
+  ListOfDifficulties: {fileID: 11400000, guid: 4f5ebcc10e97be54baf075b06bab001a, type: 2}
+  CurrentDifficulty: {fileID: 0}
+  LevelUIPrefab: {fileID: 4496992508513595077, guid: 3ed3005d868b6fb47b34948630dd203f, type: 3}
+  MedalPrefab: {fileID: 1476030135218175339, guid: fb166995b453fb44281eb9b31ed5da0d, type: 3}
+  LevelSelectHolderObject: {fileID: 0}
+  MenuSwapScript: {fileID: 0}
+  ButtonTemplate: {fileID: 3051923643733939583, guid: 1c85ceda269aaf4488c59fff1434acb1, type: 3}
+  ButtonList: []
+  CurrentPage: 0
+  Columns: 5
+  Rows: 3
+  MusicList:
+  - {fileID: 8300000, guid: 0f2cfc489d490344796b788d54d55ec6, type: 3}
+  - {fileID: 8300000, guid: a79da7dc554c716479351b60f7fff53e, type: 3}
+  - {fileID: 8300000, guid: 1f0b9a3f548c0ed47b28390f39f67cb4, type: 3}
+  - {fileID: 8300000, guid: 80de6f2d0a60b5a4bb847df94a2bf2a0, type: 3}

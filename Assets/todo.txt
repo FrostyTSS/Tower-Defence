@@ -27,4 +27,21 @@ trojan as tanky enemy spawners
 
 rewrite FC ending before release DONE
 readd water noises, previous one wouldn't fit on git DONE
+Enemy Resistence (Blast, Defender, Unslowable, Shield busting?)
+EMP enemies
+notes from board/phone
 
+LEVELS
+Phishing (tutorial, thundery pier)
+internet highway (chaotic city highway)
+world wide web (spider web with chains everywhere, covering a globe)
+airgap (windy and cloudy day, maybe a bridge)
+DDOS (multilanes, maybe like D-day? )
+Domain Squatting (Like decoy from MVM, crappy facade delivery place)
+Man in the middle (Exit is in the middle, goes down then out. Police line up? Spiral? Mission impossible magnet?)
+injection (Ascii syringe leaking passwords out)
+tunneling (Caves n' shit, like a code wormhole)
+hijacking (Airport/planes mid air dropping packages (but like internet packages))
+Cracking (Big ass padlock or something)
+Social Engineering (Constant knocking/distracing elements, Like email spam)
+Manual Override (Final Level/Credits, defend while screen gets unplugged, people try and get in etc. A simple course they spam the shit out of. Entire level is slowly coming apart and dying.)

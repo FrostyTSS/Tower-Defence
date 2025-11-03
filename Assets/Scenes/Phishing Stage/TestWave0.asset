@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WaveOrder:
   - Enemy: {fileID: 647415822513163612, guid: 5781e8f3ba897544fb3f963c30bbe7e8, type: 3}
-    DelayUntilNextEnemyType: 15
+    DelayUntilNextEnemyType: 5
     AmountOfEnemy: 1
     SwarmDelay: 1
     EnemyCamo: 0
@@ -22,5 +22,5 @@ MonoBehaviour:
     DelayUntilNextEnemyType: 10
     AmountOfEnemy: 10
     SwarmDelay: 1
-    EnemyCamo: 1
+    EnemyCamo: 0
   DialogueToLoad: PhishingTextStart

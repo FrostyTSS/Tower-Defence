@@ -31,13 +31,16 @@ public class BaseTower : MonoBehaviour
     public float Range = 5;
     public int BasePierce = 0; // see comment in projectilebase.cs
     public bool Searching = false;
+    public bool ManualTarget = false;
+    public Vector3 ManualTargetPos = Vector2.zero;
     public bool CanSeeCamo = false;
     public float TimeBetweenShots = 1;
     public bool AutoProjectileCleanup = true; // turn off for long lasting AOE attacks using projectiles, such as the pin tower.
     public bool RotateToShoot = true;
-    protected float DelayTimer = 1;
+    public float DelayTimer = 1; // only public for EMP
     public GameObject ProjectileType;
     public List<ProjectileBase> ProjectileList;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     //to do: strong targeting
@@ -62,6 +65,8 @@ public class BaseTower : MonoBehaviour
 
     void Start()
     {
+
+        ManualTargetPos = this.transform.position;
         if (!LevelPath)
         {
             LevelPath = PathHolder.instance; // get pathholder if missing
@@ -86,6 +91,11 @@ public class BaseTower : MonoBehaviour
        // ApplyUpgrade("Test");
     }
 
+    public void SetCurrentDelayTimer(float DelayTime)
+    {
+        DelayTimer = DelayTime;
+    }
+
     // Update is called once per frame
     //  public virtual void  FixedUpdate()
     void FixedUpdate()
@@ -100,7 +110,7 @@ public class BaseTower : MonoBehaviour
                 DelayTimer -= Time.fixedDeltaTime;
             }
 
-            if (!CurrentTarget && Searching == false)
+            if (!CurrentTarget && Searching == false && ManualTarget == false)
             {
 
                 FindEnemy();
@@ -108,7 +118,7 @@ public class BaseTower : MonoBehaviour
 
 
             }
-            else if (CurrentTarget && Searching == false)
+            else if (CurrentTarget && Searching == false || ManualTarget == true)
             {
                // DelayTimer -= Time.fixedDeltaTime;
                 if (DelayTimer <= 0)
@@ -327,10 +337,42 @@ public class BaseTower : MonoBehaviour
                 */
             }
         }
-        else
+        else if (ManualTarget == false)
         {
             FindEnemy();
         }
+        else if (ManualTarget == true)
+        {
+            CleanupProjectiles();
+            //if (ProjectileType.GetComponent<ProjectileBase>().Tracking)
+            // {
+            //    CurrentTarget.EnemyFutureDamage += Damage;
+            // }
+            // Debug.Log(CurrentTarget.EnemyFutureDamage + "Health check clear" + CurrentTarget.Health);
+            if (RotateToShoot)
+            {
+                transform.LookAt(ManualTargetPos);
+                transform.eulerAngles = new Vector3(0, transform.rotation.eulerAngles.y, 0);
+            }
+            // Quaternion RotatedForwardQ = Quaternion.LookRotation(TowerRef.CurrentTarget.transform.position - TowerRef.transform.position);
+            
+            // Debug.Log(ProjectileAngle);
+            ProjectileList.Add(Instantiate(ProjectileType, transform.position, Quaternion.LookRotation(ManualTargetPos - transform.position)).GetComponent<ProjectileBase>());
+            ProjectileList[ProjectileList.Count - 1].ProjOwner = this;
+            ProjectileList[ProjectileList.Count - 1].ProjTargetObj = null;
+            //copied from splitproj
+            ProjectileList[ProjectileList.Count - 1].Tracking = false;
+            ProjectileList[ProjectileList.Count - 1].ExtraProjectileFailsafe();
+            for (int i = 0; i < UpgradeList.Count; i++) // better then number ids maybe?
+            {
+                // UpgradeList[i].Effect.OnFire(this);
+                for (int j = 0; j < UpgradeList[i].Effects.Count; j++)
+                {
+                    UpgradeList[UpgradeList.Count - 1].Effects[j].OnFire(this);
+                }
+            }
+        }
+
     }
 
 

@@ -41,7 +41,10 @@ public class ProjectileBase : MonoBehaviour
        
             yield return new WaitForSeconds(LifetimeForNonTracking);
         Debug.Log("Destroying after lifetime:" + transform.name);
-        ProjTargetObj.EnemyFutureDamage -= ProjOwner.Damage;
+        if (ProjTargetObj)
+        {
+            ProjTargetObj.EnemyFutureDamage -= ProjOwner.Damage;
+        }
        Destroy(this.gameObject);
 
 
@@ -156,7 +159,10 @@ public class ProjectileBase : MonoBehaviour
         {
 
             Collided = true;
-            ProjTargetObj.EnemyFutureDamage -= ProjOwner.Damage;
+            if (ProjTargetObj)
+            {
+                ProjTargetObj.EnemyFutureDamage -= ProjOwner.Damage;
+            }
             Destroy(this.gameObject);
         }
         else
@@ -188,7 +194,7 @@ public class ProjectileBase : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (ProjTargetObj == null && Tracking || ProjTargetObj.Health <= 0 && Tracking) //failsafe incase the projectiles STILL double up despite all the other checks.
+        if (ProjTargetObj && ProjTargetObj.Health <= 0 && Tracking) //failsafe incase the projectiles STILL double up despite all the other checks.
         {
             Destroy(this.gameObject);
         }
@@ -250,7 +256,7 @@ public class ProjectileBase : MonoBehaviour
                     
                     if (hitCollider.GetComponent<BaseEnemy>().LastProjectile == null || hitCollider.GetComponent<BaseEnemy>().LastProjectile != this.gameObject)
                     {
-                        if (hitCollider.GetComponent<BaseEnemy>() != ProjTargetObj && Tracking == false)
+                        if (ProjTargetObj == null && Tracking == false || hitCollider.GetComponent<BaseEnemy>() != ProjTargetObj && Tracking == false)
                         {
                             ProjectileCollideOtherTarget(hitCollider.GetComponent<BaseEnemy>(), true, true);
                             break; // check if these breaks work

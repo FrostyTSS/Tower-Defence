@@ -20,8 +20,9 @@ public class LevelInfo : ScriptableObject
 
     public List<DifficultyClearInfo> DifficultiesCleared;
 
-    public AudioClip LobbyTheme;
-    public AudioClip RoundTheme;
+    public int StartingLobbyTheme;
+    public int StartingRoundTheme;
+    public int StartingChatTheme;
 
     [Serializable]
     public struct DifficultyClearInfo

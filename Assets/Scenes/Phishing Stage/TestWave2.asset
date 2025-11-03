@@ -17,15 +17,5 @@ MonoBehaviour:
     DelayUntilNextEnemyType: 5
     AmountOfEnemy: 1
     SwarmDelay: 0
-  - Enemy: {fileID: 647415822513163612, guid: 759743f9bb2a01b4da594476260049a8, type: 3}
-    DelayUntilNextEnemyType: 5
-    AmountOfEnemy: 5
-    SwarmDelay: 1
-  - Enemy: {fileID: 647415822513163612, guid: 759743f9bb2a01b4da594476260049a8, type: 3}
-    DelayUntilNextEnemyType: 5
-    AmountOfEnemy: 10
-    SwarmDelay: 1
-  - Enemy: {fileID: 647415822513163612, guid: 0afd603a03dc7d849aacf576a2fc686d, type: 3}
-    DelayUntilNextEnemyType: 1
-    AmountOfEnemy: 0
-    SwarmDelay: 0
+    EnemyCamo: 0
+  DialogueToLoad: 

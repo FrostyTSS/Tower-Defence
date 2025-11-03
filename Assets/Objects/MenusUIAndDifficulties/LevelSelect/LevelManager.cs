@@ -35,6 +35,8 @@ public class LevelManager : MonoBehaviour
     //public RectTransform OriginalPosition;
     public int CurrentPage = 0; public int Columns = 5; public int Rows = 3;
 
+    public List<AudioClip> MusicList;
+
 
     //save file stuff
     //redo

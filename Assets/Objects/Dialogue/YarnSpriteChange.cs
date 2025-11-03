@@ -16,7 +16,13 @@ public class YarnSpriteChange : MonoBehaviour
 
     //Talking stuff for sprite lipflaps etc. Currently unused.
 
-    public List<Sprite> SpriteList;
+    public CharacterInfo CurrentCharacterInfo;
+    public int CurrentMouthIndex = 0;
+    public int CurrentDefaultMouthIndex = 0;
+    public Image Mouth;
+    public Image Blink;
+    public Image Glasses;
+    float MouthswapTimer = 1;
 
     //have the text box profile have a pixelised effect when swapping
     public bool UsePixelTransition = false;
@@ -26,62 +32,61 @@ public class YarnSpriteChange : MonoBehaviour
 
     #endregion
 
-    private void Start()
+    private void Awake()
     {
        // SpriteSwap(0); why does it only work here
-       
+       if (CurrentCharacterInfo)
+        {
+            ResetNonPortraitItems();
+        }
     }
 
 
+    private void FixedUpdate()
+    {
+        //if (Mouth != null && CurrentCharacterInfo && DialogueHolder.instance.DialogueRunnerScript)
+       // {
+           // MouthswapTimer += Time.deltaTime;
+            //if (MouthswapTimer >= 0.45f)
+           // {
+           //     MouthSwap();
+           //     MouthswapTimer = 0;
+           // }
+       // }
+    }
 
 
-
-
-
-
-
-
-
-
-    //Set properties of the shader of the portraits. Changes what it does based on the material name which shouldn't change for the text portrait.
-    #region PortraitProperties
-
-    [YarnCommand("setportraitscale")]
-    public void SetPortraitScale(float scale)
+    public void MouthSwap()
+    {
+        CurrentMouthIndex++;
+        if (CurrentMouthIndex >= CurrentCharacterInfo.MouthSpriteList.Count)
+        {
+            CurrentMouthIndex = CurrentCharacterInfo.FirstTalkingMouthSprite;
+        }
+        Mouth.sprite = CurrentCharacterInfo.MouthSpriteList[CurrentMouthIndex];
+        //yield return new WaitForSeconds(0.5f);
+        
+    }
+    public void MouthReset()
     {
         
-        // Debug.Log(this.gameObject.GetComponent<Image>().sprite);
-        //  Debug.Log(this.gameObject.name);
-
+       CurrentMouthIndex = CurrentDefaultMouthIndex;
+        if (Mouth)
+        {
+            Mouth.sprite = CurrentCharacterInfo.MouthSpriteList[CurrentMouthIndex];
+        }
+        //yield return new WaitForSeconds(0.5f);
 
     }
 
 
-    [YarnCommand("setportraittiling")]
-    public void SetPortraitTiling(float x, float y, float z, float w)
+    [YarnCommand("SwapDefaultMouthID")]
+    public void SwapCurrentTalkingSprite(int MouthID)
     {
-       
-        // Debug.Log(this.gameObject.GetComponent<Image>().sprite);
-        //  Debug.Log(this.gameObject.name);
-
-
+        CurrentDefaultMouthIndex = MouthID;
     }
 
 
-
-    [YarnCommand("setportraittilingw")]
-    public void SetPortraitTilingW(float w)
-    {
-        
-        // Debug.Log(this.gameObject.GetComponent<Image>().sprite);
-        //  Debug.Log(this.gameObject.name);
-
-
-    }
-
-
-
-    #endregion
 
 
     //Pixelisation lerp for when you change text portraits. looked weird with big portraits though.
@@ -108,22 +113,53 @@ public class YarnSpriteChange : MonoBehaviour
         //valueToLerp = endValue;
     }
 
+    [YarnCommand("ResetBlinkMouth")]
+    public void ResetNonPortraitItems()
+    {
+        Debug.Log("ResetPos");
+        Mouth.rectTransform.anchoredPosition = CurrentCharacterInfo.MouthPos;
+        Blink.rectTransform.anchoredPosition = CurrentCharacterInfo.BlinkPos;
+        Glasses.rectTransform.anchoredPosition = CurrentCharacterInfo.GlassesPos;
 
+        Mouth.rectTransform.sizeDelta = CurrentCharacterInfo.MouthScale;
+        Blink.rectTransform.sizeDelta = CurrentCharacterInfo.BlinkScale;
+        Glasses.rectTransform.sizeDelta = CurrentCharacterInfo.GlassesScale;
 
+        Blink.sprite = CurrentCharacterInfo.BlinkSprite;
+        Mouth.sprite = CurrentCharacterInfo.MouthSpriteList[CurrentDefaultMouthIndex];
+        if (CurrentCharacterInfo.GlassesSprite)
+        {
+            Glasses.enabled = true;
+            Glasses.sprite = CurrentCharacterInfo.GlassesSprite;
+        }
+        else
+        {
+            Glasses.enabled = false;
+        }
 
+    }
+    [YarnCommand("CharacterSwap")]
+    public void CharacterSwap(int ID)
+    {
+        CurrentCharacterInfo = DialogueHolder.instance.CharacterInfoList[ID];
+        
+
+        ResetNonPortraitItems();
+        SpriteSwap(0);
+    }
     
 
 
             //big command we use for swapping portraits
-            [YarnCommand("spriteswap")]
+            [YarnCommand("SpriteSwap")]
     public void SpriteSwap(int SpriteID)
     {
         Debug.Log("Sprite swap");
-        if (SpriteID < SpriteList.Count && SpriteID >= 0) // check sprite id is within range
+        if (SpriteID < CurrentCharacterInfo.PoseSpriteList.Count && SpriteID >= 0) // check sprite id is within range
         {
            
-            this.gameObject.GetComponent<Image>().sprite = SpriteList[SpriteID];
-            this.gameObject.GetComponent<Image>().overrideSprite = SpriteList[SpriteID];
+            this.gameObject.GetComponent<Image>().sprite = CurrentCharacterInfo.PoseSpriteList[SpriteID];
+            this.gameObject.GetComponent<Image>().overrideSprite = CurrentCharacterInfo.PoseSpriteList[SpriteID];
             
                 //pixel transition
                 if (UsePixelTransition)

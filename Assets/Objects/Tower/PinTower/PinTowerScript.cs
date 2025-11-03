@@ -69,7 +69,7 @@ public class PinTowerScript : BaseTower
                     {
                         ProjectileAngle += new Vector3(0, 360 / ProjectileAmount, 0);
                        // Debug.Log(ProjectileAngle);
-                        ProjectileList.Add(Instantiate(ProjectileType, transform.position, Quaternion.Euler(ProjectileAngle)).GetComponent<ProjectileBase>());
+                        ProjectileList.Add(Instantiate(ProjectileType, transform.position, Quaternion.Euler(ProjectileAngle)).GetComponent<ProjectileBase>()); // fucked brackets
                         ProjectileList[ProjectileList.Count - 1].ProjOwner = this;
                         ProjectileList[ProjectileList.Count - 1].ProjTargetObj = CurrentTarget;
                         //copied from splitproj
