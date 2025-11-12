@@ -4,12 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Yarn.Unity;
+
 using static BuffAttributes;
 
 public class PathHolder : MonoBehaviour // was intended to just hold the paths etc but then it turned into a manager lol
@@ -19,7 +21,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     //TO FIX:
     //random offset when manual targeting with the range overlay
 
-
+    public float TESTVALUE = 0;
     public static PathHolder instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public List<Vector3> Positions;
@@ -56,7 +58,8 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public Transform UpgradeUIInitalPos;
     public GameObject UpgradeUITemplate;
     public List<GameObject> UpgradeUIList;
-
+    public Canvas UICanvas;
+    public GameObject TestObj;
 
  
     public float ThemeFadeTime = 1.25f;
@@ -331,9 +334,17 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     {
         Debug.Log("Resize?");
         RangeVisual.SetActive(false);
+
+       // RangeVisual.transform.position = TruePosition(SelectedObject.transform.position);
+
+        
         RangeVisual.transform.position = SelectedObject.transform.position;
+        
         RangeVisual.transform.localScale = Vector3.one;
-        RangeVisual.transform.localScale *= SelectedTower.Range * 1.80f;
+       RangeVisual.layer = 10; //set it to ortho only so it renders properly no matter where it is
+        RangeVisual.transform.localScale *= SelectedTower.Range * 1.95f;
+        //PathHolder.instance.RangeVisual.transform.localScale *= SelectedObject.GetComponent<BaseTower>().Range * (UICanvas.GetComponent<Canvas>().worldCamera.fieldOfView * 0.8f);
+
         RangeVisual.SetActive(true);
     }
 
@@ -682,24 +693,38 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public void SetTargetColourAndPos(RaycastHit hit)
     {
 
-         //AimTargetVisual.transform.position = new Vector3(hit.point.x, SelectedTower.transform.position.y + 2, hit.point.z);
-         Vector3 Point = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
-        AimTargetVisual.GetComponent<RectTransform>().position = Input.mousePosition;
+        //AimTargetVisual.transform.position = new Vector3(hit.point.x, SelectedTower.transform.position.y + 2, hit.point.z);
+
+        // Vector3 Point = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
+        Vector3 Point = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
+       
+        Debug.Log( Vector3.Distance(SelectedTower.transform.position, Point) + " and the z hit is" + hit.point.z);
+
+        Vector2 mousepos = Input.mousePosition;
+        //mousepos.x += 0.5f; mousepos.y += 0.5f;
+       // Ray ray = Camera.main.ScreenPointToRay(mousepos);
+
+        AimTargetVisual.GetComponent<RectTransform>().position = mousepos;
         //AimTargetVisual.GetComponent<RectTransform>().position = Input.mousePosition;
         // if (Vector3.Distance(SelectedTower.transform.position, AimTargetVisual.transform.position) > SelectedTower.GetComponent<BaseTower>().Range)
-        if (Vector3.Distance(SelectedTower.transform.position, Point) > SelectedTower.GetComponent<BaseTower>().Range)
+        TestObj.transform.position = Point;
+        if (Vector3.Distance(SelectedTower.transform.position, Point) >= SelectedTower.GetComponent<BaseTower>().Range)
+        // if (Vector3.Distance(SelectedTower.transform.position, Point) > SelectedTower.GetComponent<BaseTower>().Range)
         {
-            Cursor.SetCursor(AimTargetVisual.GetComponent<TargetSprite>().BadTarget.texture, Vector2.zero, CursorMode.ForceSoftware);
+            Cursor.SetCursor(AimTargetVisual.GetComponent<TargetSprite>().BadTarget.texture, new Vector2(0.5f,0.5f), CursorMode.ForceSoftware);
             AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(1);
-            Debug.Log("OUTTA RANGE: " + Vector3.Distance(SelectedTower.transform.position, Point) + " and the z hit is" + hit.point.z);
+           
         }
         else
         {
-            Cursor.SetCursor(AimTargetVisual.GetComponent<TargetSprite>().GoodTarget.texture, Vector2.zero, CursorMode.ForceSoftware);
+            Cursor.SetCursor(AimTargetVisual.GetComponent<TargetSprite>().GoodTarget.texture, new Vector2(0.5f, 0.5f), CursorMode.ForceSoftware);
             AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(0);
             Debug.Log("WITHIN RANGE");
-            SelectedTower.ManualTargetPos = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
-            SelectedTower.ManualTargetPosUI = Input.mousePosition; 
+            // SelectedTower.ManualTargetPos = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
+            SelectedTower.ManualTargetPos = Point;
+            SelectedTower.ManualTargetPosUI = Input.mousePosition;
+            SelectedTower.transform.LookAt(SelectedTower.ManualTargetPos);
+           
         }
     }
 
@@ -727,6 +752,218 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         }
     }
 
+    /*
+    public Vector3 TrueMousePosition()
+    {
+        Vector3 output = Vector2.zero;
+        
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(
+            UICanvas.GetComponent<RectTransform>(),
+            Input.mousePosition,
+            //Camera.main,
+            UICanvas.worldCamera,
+            out output);
+       
+        return output;
+    }
+
+    public Vector3 TruePosition(Vector3 Pos)
+    {
+        Vector3 output = Vector2.zero;
+
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(
+            UICanvas.GetComponent<RectTransform>(),
+            Pos,
+            UICanvas.worldCamera,
+            out output);
+        return output;
+    }
+    */
+   
+    void OnDrawGizmos()
+    {
+        if (Application.isEditor)
+            if (Camera.current == Camera.main || Camera.current == SceneView.lastActiveSceneView.camera)
+            {
+
+
+                Plane groundPlane = new Plane(Vector3.up, new Vector3(0, 1, 0));
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                float distance;
+                //simply initializing vector3 point, nothing else, this vector zero does nothing
+                Vector3 point = Vector3.zero;
+                if (groundPlane.Raycast(ray, out distance))
+                {
+                    point = ray.GetPoint(distance);
+                    Debug.DrawRay(ray.origin, ray.direction, Color.blue);
+                }
+
+                Gizmos.color = Color.orange;
+                Gizmos.DrawSphere(point, 1.2f);
+                if (SelectedTower)
+                {
+                    Debug.Log(Vector3.Distance(point, SelectedTower.transform.position));
+                    // Draw a yellow sphere at the transform's position
+                    Gizmos.color = new Color(1, 0.7f, 0.7f, 0.35f);
+                    Gizmos.DrawSphere(SelectedTower.transform.position, SelectedTower.Range);
+                }
+
+
+
+
+                /*
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                //LayerMask mask = LayerMask.GetMask("Tower", "Default");
+
+                //if (Physics.Raycast(ray, out hit, 10000, mask))
+                if (Physics.Raycast(ray, out hit, 10000))
+                {
+                    //TestObj.transform.position = hit.point;
+                    Debug.DrawRay(ray.origin, ray.direction * 100, Color.green);
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawSphere(new Vector3(hit.point.x, 1, hit.point.z), 0.0f);
+                    TestObj.transform.position = new Vector3(hit.point.x, ray.origin.y, hit.point.z);
+                }
+                ray = new Ray(TestObj.transform.position, -TestObj.transform.up);
+                //if (Physics.Raycast(ray, out hit, 10000, mask))
+                if (Physics.Raycast(ray, out hit, 10000))
+                {
+                    //TestObj.transform.position = hit.point;
+                    Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawSphere(new Vector3(hit.point.x, 1, hit.point.z), 0.01f);
+                    //TestObj.transform.position = new Vector3(hit.point.x, ray.origin.y, hit.point.z);
+                }
+                //NOTES:
+                //output still has that massive offset..
+                /*
+                Gizmos.color = Color.blue;
+                var pos = Input.mousePosition;
+
+                Vector3 output = Vector2.zero;
+                Ray ray;
+
+
+                 Vector3 v3Pos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane);
+                v3Pos = Camera.main.ScreenToWorldPoint(v3Pos);
+              //  UICanvas.worldCamera.transform.position = v3Pos;
+
+               // Gizmos.DrawSphere(v3Pos, 0.1f);
+                RectTransformUtility.ScreenPointToWorldPointInRectangle(
+                        UICanvas.GetComponent<RectTransform>(),
+                        pos,
+                        UICanvas.worldCamera,
+                        out output);
+
+                    //Gizmos.DrawSphere(output, 1);
+                    Gizmos.color = Color.rebeccaPurple;
+                // output.y = UICanvas.worldCamera.transform.position.y;
+
+                ray = new Ray(output, UICanvas.worldCamera.transform.forward);
+
+
+
+                Gizmos.color = Color.orange;
+
+                //  pos = new Vector3(Mathf.InverseLerp(0, 1920, pos.x), Mathf.InverseLerp(0, 1080, pos.y), 0);
+                // ray = Camera.main.ViewportPointToRay(pos);
+                RaycastHit hit;
+
+
+                 //ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+
+               // Vector3 v3Pos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 2);
+                //v3Pos = Camera.main.ScreenToWorldPoint(v3Pos);
+                //Gizmos.DrawSphere(v3Pos, 0.1f);
+                // ray = new Ray(v3Pos, new Vector3(v3Pos.x, -1, v3Pos.z));
+                //  ray = new Ray(v3Pos, new Vector3(v3Pos.x, -1, v3Pos.z));
+                //TestObj.transform.position = v3Pos;
+                //  ray = new Ray(TestObj.transform.position, -TestObj.transform.up);
+
+
+               // ray = Camera.main.ScreenPointToRay(pos);
+                //ray.origin = v3Pos;
+                //Debug.Log(ray.origin + " " + ray.direction);
+
+                if (Physics.Raycast(ray, out hit))
+                {
+
+                    Debug.DrawRay(ray.origin, ray.direction * 100, Color.green);
+                   // Gizmos.DrawSphere(hit.point, 1.5f);
+
+                }
+
+                if (SelectedTower)
+                {
+
+                    //v3Pos.y = SelectedTower.transform.position.y;
+                    Debug.Log(output);
+                    //Debug.Log(Vector3.Distance(output, SelectedTower.transform.position));
+                    // Gizmos.DrawSphere(output, 2.5f);
+                    TestObj.transform.position = v3Pos;
+
+                    Gizmos.color = Color.red;
+                    //v3Pos = v3Pos - SelectedTower.transform.position;
+                    //Gizmos.DrawSphere(v3Pos, 1);
+                    //Debug.Log(Vector2.Distance(new Vector2(v3Pos.x, v3Pos.z), new Vector2(SelectedTower.transform.position.x, SelectedTower.transform.position.z)));
+                }
+
+                /*
+                //Gizmos.DrawSphere(TrueMousePosition(), 1);
+                Vector3 mouseScreen = Input.mousePosition;
+                //mousepos.x -= 100; mousepos.y -= 100;
+                Ray ray = Camera.main.ScreenPointToRay(mouseScreen);
+                Debug.Log(mouseScreen);
+
+                // you must define a starting plane away from the camera for this to work.
+                // this essentially specifies the 'radius' of the mouse's influence.
+
+
+                //ray.origin = TestRay;
+
+                //Vector3 mouseScreen = Input.mousePosition;
+                // you must define a starting plane away from the camera for this to work.
+                // this essentially specifies the 'radius' of the mouse's influence.
+                mouseScreen.z = 10.5f;
+                Vector3 rayOrigin = Camera.main.ScreenToWorldPoint(mouseScreen);
+
+                // use the camera's forward direction
+                 Vector3 rayDirection = Camera.main.transform.TransformDirection(Vector3.forward);
+               // Vector3 rayDirection = new Vector3(rayOrigin)
+                // Vector3 rayDirection = ray.direction;
+                ray = new Ray(rayOrigin, rayDirection);
+
+
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+
+                    Debug.DrawRay(ray.origin, ray.direction * 100, Color.green);
+                    Vector3 NewOrigin = new Vector3(hit.point.x, ray.origin.y, hit.point.z);
+                    ray.origin = NewOrigin;
+                }
+                    //int TowerLayerID = LayerMask.NameToLayer("Tower");
+                    //  int WaterLayerID = LayerMask.NameToLayer("Water");
+
+                    if (Physics.Raycast(ray, out hit))
+                {
+
+                    if (SelectedTower)
+                    {
+                        Vector3 newpoint = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
+                        Gizmos.DrawSphere(newpoint, 0.1f);
+                        Debug.DrawRay(ray.origin, ray.direction * 100, Color.yellow);
+                        TestObj.transform.position = newpoint;
+                        newpoint = new Vector3(TestObj.transform.position.x, SelectedTower.transform.position.y, TestObj.transform.position.z);
+                        Debug.Log(Vector3.Distance(newpoint, SelectedTower.transform.position));
+                    }
+                }
+                */
+            }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -742,7 +979,11 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             {
                 if (hit.transform.gameObject.layer != TowerLayerID)
                 {
-                    PathHolder.instance.SelectTower(this.gameObject);
+                    if (this.gameObject == null) // how am i getting erros for this
+                    {
+                        SelectTower(null);
+                    }
+                   SelectTower(this.gameObject);
                 }
             }
         }
@@ -750,15 +991,22 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         if (Input.GetKey(KeyCode.Mouse1) && SelectedTower && AimTargetVisual.activeSelf) // for manual target. LOOK INTO SWAPPING FROM OBJECT TO CURSOR.
         {
             Debug.Log("Target");
-            
-            
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
+
+            //TrueMousePosition
+            Vector2 mousepos = Input.mousePosition;
+            mousepos.x += 0.5f; mousepos.y += 0.5f;
+            Ray ray = Camera.main.ScreenPointToRay(mousepos);
+             
+
             RaycastHit hit;
+
+
+
             //int TowerLayerID = LayerMask.NameToLayer("Tower");
             //  int WaterLayerID = LayerMask.NameToLayer("Water");
             if (Physics.Raycast(ray, out hit))
             {
-                Debug.DrawRay(ray.origin, ray.direction, Color.red, 1);
+                //Debug.DrawRay(ray.origin, ray.direction, Color.red, 1);
                 SetTargetColourAndPos(hit);
                 /*
                 AimTargetVisual.transform.position = new Vector3(hit.point.x, SelectedTower.transform.position.y + 2, hit.point.z);

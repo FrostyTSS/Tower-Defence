@@ -1,6 +1,7 @@
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 //using static UnityEditor.Rendering.CameraUI;
 
@@ -20,6 +21,7 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     public AudioClip PickupSound;
     public AudioClip DropoffSound;
     public float SoundVolume = 0.75f;
+    Vector2 OriginalSpriteDelta;
     void Start()
     {
 
@@ -35,7 +37,7 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
         //OriginalHUDPosition.x += 100; // It spawns offset to the side for.. reasons. So We offset it BACK!
         transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().sprite = TowerToSpawn.GetComponentInChildren<SpriteRenderer>().sprite;
         HolderObject = this.transform.parent; //oh, you can't ignore the horizontal mask, jank time.
-
+        OriginalSpriteDelta = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta;
 
         //GetComponentInChildren<UnityEngine.UI.Image>().sprite = TowerToSpawn.GetComponentInChildren<SpriteRenderer>().sprite; // why doesnt this work :(
         //Debug.Log(TowerToSpawn.transform.GetChild(0).name);
@@ -47,8 +49,26 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
 
     }
 
+   // void OnDrawGizmos()
+    //{
+        /*
+        var pos = Input.mousePosition;
 
+        Vector3 output = Vector2.zero;
 
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(
+            HolderCanvas.GetComponent<RectTransform>(),
+            pos,
+            HolderCanvas.worldCamera,
+            out output);
+
+        
+
+        Gizmos.DrawSphere(output, 1);
+        */
+    //}
+
+  
 
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -65,22 +85,41 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
             {
                 //overlay of range
                 PathHolder.instance.RangeVisual.SetActive(true);
-                PathHolder.instance.RangeVisual.layer = 5;
+              //  PathHolder.instance.RangeVisual.layer = 5;//set it to UI layer
                 PathHolder.instance.DraggingTower = true;
             }
+
+            GetComponent<Image>().color = Color.clear;
+            // transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(1222 / 2, 752); // ""correct"" size
+            //Vector2 WorldSpaceCorrectSize = new Vector2(418, 444); //roughly
+            //transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = WorldSpaceCorrectSize * 1.55f; // IF THIS STILL DOESN"T WORK, JUST SPAWN A SPRITE UNDERNEATH AS A VISUAL
+            transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = (Vector2)TowerToSpawn.transform.GetChild(0).localScale * (HolderCanvas.GetComponent<Canvas>().worldCamera.fieldOfView * 0.6f);
+            Debug.Log(TowerToSpawn.transform.GetChild(0).localScale + "SCALE FOR TOWERTOSPAWN");
+
+            //Vector2 ViewPortPos = Camera.main.WorldToViewportPoint()
+
+            PathHolder.instance.RangeVisual.transform.localScale = Vector3.one;
+            // PathHolder.instance.RangeVisual.transform.localScale *= TowerToSpawn.GetComponent<BaseTower>().Range * 3.75f; // diameter to range, multiplied due to UI scaling
+            // PathHolder.instance.RangeVisual.transform.localScale *= TowerToSpawn.GetComponent<BaseTower>().Range * (HolderCanvas.GetComponent<Canvas>().worldCamera.fieldOfView * 0.2f);
+
+            PathHolder.instance.RangeVisual.transform.localScale *= TowerToSpawn.GetComponent<BaseTower>().Range * 1.95f;
         }
     }
 
     public void OnDrag(PointerEventData data)
     {
-
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(HolderCanvas.GetComponent<RectTransform>(), Input.mousePosition, HolderCanvas.GetComponent<Canvas>().worldCamera, out output);
+       
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(HolderCanvas.GetComponent<RectTransform>(), data.position, HolderCanvas.GetComponent<Canvas>().worldCamera, out output);
+      //will this break anything by commenting? dunno.
 
         if (PathHolder.instance)
         {
-
+            //is this faster or slower then bitshifts with a layermask?
             int TowerLayerID = LayerMask.NameToLayer("Tower");
             int WaterLayerID = LayerMask.NameToLayer("Water");
+            int DefaultLayerID = LayerMask.NameToLayer("Default");
+            int TrackLayerID = LayerMask.NameToLayer("Track");
+            //LayerMask mask = LayerMask.GetMask("Tower", "Water", "Default");
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
             RaycastHit hit;
@@ -90,24 +129,24 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
             //  if (Physics.Raycast(ray, out hit, 9999, GroundCheck))
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.transform.gameObject.layer == TowerLayerID || hit.transform.gameObject.layer == WaterLayerID)
+                PathHolder.instance.RangeVisual.transform.position = hit.point;
+                if (hit.transform.gameObject.layer == TowerLayerID || hit.transform.gameObject.layer == WaterLayerID || hit.transform.gameObject.layer == DefaultLayerID || hit.transform.gameObject.layer == TrackLayerID)
                 {
-                    GetComponent<Image>().color = Color.red;
+                    transform.GetChild(0).GetComponent<Image>().color = Color.red;
                 }
                 else
                 {
-                    GetComponent<Image>().color = Color.white;
+                    transform.GetChild(0).GetComponent<Image>().color = Color.green;
                 }
             }
             else
             {
-                GetComponent<Image>().color = Color.white;
+                transform.GetChild(0).GetComponent<Image>().color = Color.white;
             }
 
-
-            PathHolder.instance.RangeVisual.transform.position = output;
-            PathHolder.instance.RangeVisual.transform.localScale = Vector3.one;
-            PathHolder.instance.RangeVisual.transform.localScale *= TowerToSpawn.GetComponent<BaseTower>().Range * 4; // diameter to range, multiplied due to UI scaling
+            //output.z = 1;
+           
+            
             GetComponent<RectTransform>().position = output;
         }
 
@@ -116,23 +155,33 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        transform.GetChild(0).GetComponent<Image>().color = Color.white;
         GetComponent<Image>().color = Color.white;
+        transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = OriginalSpriteDelta;
 
         int TowerLayerID = LayerMask.NameToLayer("Tower");
-        int WaterLayerID = LayerMask.NameToLayer("Water");
+       // int WaterLayerID = LayerMask.NameToLayer("Water");
+
+
+        // Using layer names
+        LayerMask mask = LayerMask.GetMask("Placeable", "Tower");
+
         
+
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
         {
-            if (hit.transform.gameObject.layer != TowerLayerID && hit.transform.gameObject.layer != WaterLayerID)
+            if (hit.transform.gameObject.layer != TowerLayerID)
             {
 
                 if (PathHolder.instance && PathHolder.instance.Money >= Cost)
                 {
                     PathHolder.instance.RangeVisual.layer = 0;
                     PathHolder.instance.RangeVisual.SetActive(false);
+
                     if (this.GetComponent<AudioSource>() && DropoffSound)
                     {
                         //this.GetComponent<AudioSource>().clip = PickupSound;
@@ -171,9 +220,9 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
                     //   {
 
                 }
-                
 
-            }
+
+            }   
         }
         this.transform.SetParent(HolderObject, false);
         // this.transform.parent = HolderObject;

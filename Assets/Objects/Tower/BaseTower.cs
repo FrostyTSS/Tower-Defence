@@ -58,13 +58,9 @@ public class BaseTower : MonoBehaviour
     }
 
    
-
-    void OnDrawGizmosSelected()
-    {
-        // Draw a yellow sphere at the transform's position
-        Gizmos.color = new Color(0, 0.7f, 0.7f, 0.35f);
-        Gizmos.DrawSphere(transform.position, Range);
-    }
+    
+    
+    
 
     void Start()
     {
