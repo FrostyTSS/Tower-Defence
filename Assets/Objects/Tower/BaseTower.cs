@@ -25,13 +25,13 @@ public class BaseTower : MonoBehaviour
 
     public VillageTowerScript CurrentBuffer;
 
-   public enum TargetMode {First, Last, Close}; // add strong when enemys are ready
+   public enum TargetMode {First, Last, Close, Manual}; // add strong when enemys are ready
     public TargetMode CurrentTargetingMode = TargetMode.Close;
     public int Damage = 1;
     public float Range = 5;
     public int BasePierce = 0; // see comment in projectilebase.cs
     public bool Searching = false;
-    public bool ManualTarget = false;
+  //  public bool ManualTarget = false; // replaced with targeting mode, makes more sense
     public Vector3 ManualTargetPos = Vector3.zero;
     public Vector2 ManualTargetPosUI = Vector2.zero;
     public bool CanSeeCamo = false;
@@ -110,7 +110,7 @@ public class BaseTower : MonoBehaviour
                 DelayTimer -= Time.fixedDeltaTime;
             }
 
-            if (!CurrentTarget && Searching == false && ManualTarget == false)
+            if (!CurrentTarget && Searching == false && CurrentTargetingMode != TargetMode.Manual)
             {
 
                 FindEnemy();
@@ -118,7 +118,7 @@ public class BaseTower : MonoBehaviour
 
 
             }
-            else if (CurrentTarget && Searching == false || ManualTarget == true)
+            else if (CurrentTarget && Searching == false || CurrentTargetingMode == TargetMode.Manual)
             {
                // DelayTimer -= Time.fixedDeltaTime;
                 if (DelayTimer <= 0)
@@ -337,11 +337,11 @@ public class BaseTower : MonoBehaviour
                 */
             }
         }
-        else if (ManualTarget == false)
+        else if (CurrentTargetingMode != TargetMode.Manual)
         {
             FindEnemy();
         }
-        else if (ManualTarget == true)
+        else if (CurrentTargetingMode == TargetMode.Manual)
         {
             CleanupProjectiles();
             //if (ProjectileType.GetComponent<ProjectileBase>().Tracking)

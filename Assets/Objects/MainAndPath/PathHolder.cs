@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -58,6 +59,8 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public Transform UpgradeUIInitalPos;
     public GameObject UpgradeUITemplate;
     public List<GameObject> UpgradeUIList;
+    public List<GameObject> TargetSettings;
+    public Image TargetingSettingsUIImage;
     public Canvas UICanvas;
     public GameObject TestObj;
 
@@ -148,7 +151,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         {
             RoundText.text = "Setup Your Defenses!";
         }
-       
+        ToggleTargetOptions(false);
         //StartNewRound();
     }
 
@@ -282,6 +285,87 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         }
     }
 
+    public void ChangeTargetMode(int ID)
+    {
+        if (SelectedTower)
+        {
+            switch (ID)
+            {
+                case 0:
+                    SelectedTower.CurrentTargetingMode = BaseTower.TargetMode.First;
+                    AimTargetVisual.SetActive(false);
+                    break;
+
+                case 1:
+                    SelectedTower.CurrentTargetingMode = BaseTower.TargetMode.Last;
+                    AimTargetVisual.SetActive(false);
+                    break;
+
+                case 2:
+                    SelectedTower.CurrentTargetingMode = BaseTower.TargetMode.Close;
+                    AimTargetVisual.SetActive(false);
+                    break;
+
+                case 3:
+                    SelectedTower.CurrentTargetingMode = BaseTower.TargetMode.Manual;
+                    AimTargetVisual.SetActive(true);
+                    AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(0);
+                    CheckTargetRangeOnce();
+
+                    AimTargetVisual.GetComponent<RectTransform>().position = SelectedTower.ManualTargetPosUI;
+                    // CheckTargetRangeOnce();
+                    break;
+
+                default:
+                    break;
+            }
+            ToggleTargetOptions(true);
+        }
+    }
+
+     void ToggleTargetOptions(bool On)
+    {
+        //text colour is 1EFF00 in hex, or 0.1170101 1 0 for RGB
+        if (SelectedTower && On)
+        {
+            for (int i = 0; i < TargetSettings.Count; i++)
+            {
+                if (TargetSettings[i].GetComponent<Button>())
+                {
+                    GameObject CurrentButton = TargetSettings[i]; // now how in sam hill do I figure out which is which..?
+                    Debug.Log(CurrentButton.name + " < obj name and target name >" + SelectedTower.CurrentTargetingMode.ToSafeString());
+                    if (CurrentButton.name == SelectedTower.CurrentTargetingMode.ToSafeString()) //this'll do cause I'm lazy..
+                    {
+                        //CurrentButton.GetComponent<Image>().color = Color.white;
+                        CurrentButton.GetComponentInChildren<TextMeshProUGUI>().color = new Color(0.1170101f, 1, 0);
+                    }
+                    else
+                    {
+                        CurrentButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.darkSlateGray;
+                        //CurrentButton.GetComponent<Image>().color = Color.gray;
+                    }
+
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < TargetSettings.Count; i++)
+            {
+                if (TargetSettings[i].GetComponent<Button>())
+                {
+                    GameObject CurrentButton = TargetSettings[i]; // now how in sam hill do I figure out which is which..?
+
+
+                    CurrentButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.darkSlateGray;
+                        CurrentButton.GetComponent<Image>().color = Color.gray;
+                    
+
+                }
+            }
+        }
+    }
+
     public void SelectTower(GameObject SelectedObject)
     {
        
@@ -291,10 +375,13 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             SelectedTower = SelectedObject.GetComponent<BaseTower>();
                 //SelectedTowerMat = SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().material;
                 SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().color = GlowColour;
-            
+            TargetingSettingsUIImage.sprite = AimTargetVisual.GetComponent<TargetSprite>().GoodTarget;
             InitRangeVisual(SelectedObject);
+            ToggleTargetOptions(true);
+
+
            
-            if (SelectedTower.ManualTarget)
+            if (SelectedTower.CurrentTargetingMode == BaseTower.TargetMode.Manual)
             {
                 AimTargetVisual.SetActive(true);
                 AimTargetVisual.GetComponent<TargetSprite>().SwapTargetIcon(0);
@@ -315,10 +402,12 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
          else if (SelectedTower)
             {
             RangeVisual.SetActive(false);
+            TargetingSettingsUIImage.sprite = AimTargetVisual.GetComponent<TargetSprite>().BadTarget;
             SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
               //  SelectedTowerMat = null;
                 SelectedTower = null;
             ShowUpgradeUI(false);
+            ToggleTargetOptions(false);
             Debug.Log("Unselected!");
             AimTargetVisual.SetActive(false);
         }
@@ -330,7 +419,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     }
 
     //rescales the range visual so we can call it from upgrading towers
-    public void InitRangeVisual(GameObject SelectedObject)
+     public void InitRangeVisual(GameObject SelectedObject)
     {
         Debug.Log("Resize?");
         RangeVisual.SetActive(false);
@@ -486,7 +575,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     }
 
 
-    public void EnemyCheck()
+     void EnemyCheck()
     {
         Enemies.RemoveAll(s => s == null);
         if (Enemies.Count <= 0 && RoundFinishedSpawning == true && RoundCleared == false)
@@ -685,10 +774,10 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     }
 
 
-    public void EnableManualTargeting(BaseTower TowerToEnable)
-    {
 
-    }
+ //   TargetSettingHolder
+
+   
 
     public void SetTargetColourAndPos(RaycastHit hit)
     {
@@ -975,20 +1064,24 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             int TowerLayerID = LayerMask.NameToLayer("Tower");
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             //  int WaterLayerID = LayerMask.NameToLayer("Water");
-            if (Physics.Raycast(ray, out hit))
+            if (EventSystem.current.IsPointerOverGameObject() == false) // block via UI?
             {
-                if (hit.transform.gameObject.layer != TowerLayerID)
+                if (Physics.Raycast(ray, out hit))
                 {
-                    if (this.gameObject == null) // how am i getting erros for this
+                    if (hit.transform.gameObject.layer != TowerLayerID)
                     {
-                        SelectTower(null);
+                        if (this.gameObject == null) // how am i getting erros for this
+                        {
+                            SelectTower(null);
+                        }
+                        SelectTower(this.gameObject);
                     }
-                   SelectTower(this.gameObject);
                 }
             }
         }
 
-        if (Input.GetKey(KeyCode.Mouse1) && SelectedTower && AimTargetVisual.activeSelf) // for manual target. LOOK INTO SWAPPING FROM OBJECT TO CURSOR.
+        //    if (Input.GetKey(KeyCode.Mouse1) && SelectedTower && AimTargetVisual.activeSelf) // for manual target. LOOK INTO SWAPPING FROM OBJECT TO CURSOR.
+        if (Input.GetKey(KeyCode.Mouse1) && SelectedTower && SelectedTower.CurrentTargetingMode == BaseTower.TargetMode.Manual) // for manual target. LOOK INTO SWAPPING FROM OBJECT TO CURSOR.
         {
             Debug.Log("Target");
 
