@@ -10,6 +10,7 @@ public class DifficultyInfo : ScriptableObject
     public float BloonSpeedIncrease = 0;
     public Color MedalColour;
     public AudioClip VictoryTheme;
+    public int DifficultyOrder = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     
 }

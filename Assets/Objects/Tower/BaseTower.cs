@@ -34,10 +34,12 @@ public class BaseTower : MonoBehaviour
   //  public bool ManualTarget = false; // replaced with targeting mode, makes more sense
     public Vector3 ManualTargetPos = Vector3.zero;
     public Vector2 ManualTargetPosUI = Vector2.zero;
+    public float ManualTargetingYPos = 0;
     public bool CanSeeCamo = false;
     public float TimeBetweenShots = 1;
     public bool AutoProjectileCleanup = true; // turn off for long lasting AOE attacks using projectiles, such as the pin tower.
     public bool RotateToShoot = true;
+   
     public float DelayTimer = 1; // only public for EMP
     public GameObject ProjectileType;
     public List<ProjectileBase> ProjectileList;
@@ -64,13 +66,17 @@ public class BaseTower : MonoBehaviour
 
     void Start()
     {
-        
-        ManualTargetPos = this.transform.position;
-        ManualTargetPosUI = Camera.main.WorldToScreenPoint(ManualTargetPos);
+       
         if (!LevelPath)
         {
             LevelPath = PathHolder.instance; // get pathholder if missing
         }
+
+
+        ManualTargetingYPos = LevelPath.StartPosition.y;
+        ManualTargetPos = this.transform.position;
+        ManualTargetPosUI = Camera.main.WorldToScreenPoint(ManualTargetPos);
+
         if (ListOfUpgrades)
            // Debug.Log("breh");
         { // use a scriptable object as our source of upgrades
@@ -277,10 +283,11 @@ public class BaseTower : MonoBehaviour
 
    public virtual void ShootEnemy()
     {
-        if (CurrentTarget)
+        //check if the first ones second condition doesn't screw anything up
+        if (CurrentTarget && CurrentTargetingMode != TargetMode.Manual && CurrentTarget.isActiveAndEnabled)
         {
             CleanupProjectiles();
-            if (Vector3.Distance(this.transform.position, CurrentTarget.transform.position) > Range)
+            if (Vector3.Distance(this.transform.position, CurrentTarget.transform.position) > Range || CurrentTarget.Health <= 0)
             {
                 FindEnemy();
             }
@@ -297,7 +304,7 @@ public class BaseTower : MonoBehaviour
                     {
                         CurrentTarget.EnemyFutureDamage += Damage;
                     }
-                    Debug.Log(CurrentTarget.EnemyFutureDamage + "Health check clear" + CurrentTarget.Health);
+                    //Debug.Log(CurrentTarget.EnemyFutureDamage + "Health check clear" + CurrentTarget.Health);
                     if (RotateToShoot)
                     {
                         transform.LookAt(CurrentTarget.transform);
@@ -355,9 +362,11 @@ public class BaseTower : MonoBehaviour
                 transform.eulerAngles = new Vector3(0, transform.rotation.eulerAngles.y, 0);
             }
             // Quaternion RotatedForwardQ = Quaternion.LookRotation(TowerRef.CurrentTarget.transform.position - TowerRef.transform.position);
-            
+
             // Debug.Log(ProjectileAngle);
-            ProjectileList.Add(Instantiate(ProjectileType, transform.position, Quaternion.LookRotation(ManualTargetPos - transform.position)).GetComponent<ProjectileBase>());
+            Vector3 SpawnPos = new Vector3(transform.position.x, ManualTargetingYPos, transform.position.z);
+
+            ProjectileList.Add(Instantiate(ProjectileType, SpawnPos, Quaternion.LookRotation(ManualTargetPos - transform.position)).GetComponent<ProjectileBase>());
             ProjectileList[ProjectileList.Count - 1].ProjOwner = this;
             ProjectileList[ProjectileList.Count - 1].ProjTargetObj = null;
             //copied from splitproj

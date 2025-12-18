@@ -76,7 +76,7 @@ public class ProjectileBase : MonoBehaviour
             }
         }
         OnProjHit();
-        if (ProjTargetObj)
+        if (ProjTargetObj && ProjTargetObj != null && ProjTargetObj.Health > 0)
         {
             ProjTargetObj.TakeDamage(ProjOwner.Damage, ProjOwner, this.gameObject, true); // base damage, checks if enemy is dead
 
@@ -95,6 +95,8 @@ public class ProjectileBase : MonoBehaviour
         }
         else
         {
+            Debug.Log("fake collision, explode");
+            Destroy(this.gameObject);
             return ;
         }
     }
@@ -194,7 +196,7 @@ public class ProjectileBase : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (ProjTargetObj && ProjTargetObj.Health <= 0 && Tracking) //failsafe incase the projectiles STILL double up despite all the other checks.
+        if (ProjTargetObj && ProjTargetObj.Health <= 0 && Tracking || Tracking && ProjTargetObj == null) //failsafe incase the projectiles STILL double up despite all the other checks. second half of check might be iffy.
         {
             Destroy(this.gameObject);
         }

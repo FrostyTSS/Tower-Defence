@@ -30,6 +30,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public bool WaveInProgress = false;
     public List<WaveInfo> WaveData;
     public Transform WaveSpawnpoint;
+    public Vector3 FullscreenParticleSpawnpoint;
      public Vector3 StartPosition;
     public int Round = 0;
     public bool RoundFinishedSpawning = true;
@@ -46,6 +47,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public BaseTower SelectedTower;
     public GameObject RangeVisual;
     public GameObject AimTargetVisual;
+    public Color BaseButtonColour = new Color(0.3113208f, 0.3113208f, 0.3113208f);
     public Color GlowColour;
    // public Material GlowMat;
     
@@ -117,23 +119,30 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             GetComponent<AudioSource>().clip = LevelManager.instance.MusicList[CurrentLobbyTheme];
             GetComponent<AudioSource>().Play();
         }
-        if (AutoStartButton)
-        {
-            if (AutoRoundStart == true)
-            {
-                AutoStartButton.GetComponent<Image>().color = Color.white;
-            }
-            else
-            {
-                AutoStartButton.GetComponent<Image>().color = Color.gray;
-            }
-        }
+        
 
         if (LevelManager.instance && LevelManager.instance.CurrentDifficulty)
         {
             Lives = LevelManager.instance.CurrentDifficulty.StartingHealth;
             Money = LevelManager.instance.CurrentDifficulty.StartingCash;
+            if (LevelManager.instance.CurrentDifficulty.StartingHealth <= 1 || LevelManager.instance.CurrentDifficulty.DifficultyOrder >= 3) // lock autostart at difficulty
+            {
+                AutoRoundStart = true;
+                AutoStartButton.GetComponent<Image>().color = Color.crimson;
+                AutoStartButton.GetComponent<Button>().enabled = false;
+            }
            
+        }
+        else if (AutoStartButton)
+        {
+            if (AutoRoundStart == true)
+            {
+                AutoStartButton.GetComponentInChildren<TextMeshProUGUI>().color = GlowColour;
+            }
+            else
+            {
+                AutoStartButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.darkSlateGray;
+            }
         }
         if (WinScript)
         {
@@ -172,12 +181,12 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             {
                 if (AutoRoundStart == true)
                 {
-                    AutoStartButton.GetComponent<Image>().color = Color.white;
-                }
+                AutoStartButton.GetComponentInChildren<TextMeshProUGUI>().color = GlowColour;
+            }
                 else
                 {
-                    AutoStartButton.GetComponent<Image>().color = Color.gray;
-                }
+                AutoStartButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.darkSlateGray;
+            }
             }
         
     }
@@ -210,7 +219,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             {
 
 
-                RoundStartButton.GetComponent<Image>().color = Color.gray;
+                RoundStartButton.GetComponentInChildren<TextMeshProUGUI>().color = GlowColour;
 
             }
            // if (Round < WaveData.Count)
@@ -333,15 +342,25 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 if (TargetSettings[i].GetComponent<Button>())
                 {
                     GameObject CurrentButton = TargetSettings[i]; // now how in sam hill do I figure out which is which..?
+
                     Debug.Log(CurrentButton.name + " < obj name and target name >" + SelectedTower.CurrentTargetingMode.ToSafeString());
-                    if (CurrentButton.name == SelectedTower.CurrentTargetingMode.ToSafeString()) //this'll do cause I'm lazy..
+
+                    if (SelectedTower.RotateToShoot == false || SelectedTower.ProjectileType == null) // disable target selection since it doesn't "aim" properly
+                    {
+                        CurrentButton.GetComponent<Button>().enabled = false;
+                        CurrentButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.crimson;
+                    }
+                    
+                    else if (CurrentButton.name == SelectedTower.CurrentTargetingMode.ToSafeString()) //this'll do cause I'm lazy..
                     {
                         //CurrentButton.GetComponent<Image>().color = Color.white;
-                        CurrentButton.GetComponentInChildren<TextMeshProUGUI>().color = new Color(0.1170101f, 1, 0);
+                        CurrentButton.GetComponentInChildren<TextMeshProUGUI>().color = GlowColour;
+                        CurrentButton.GetComponent<Button>().enabled = true;
                     }
                     else
                     {
                         CurrentButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.darkSlateGray;
+                        CurrentButton.GetComponent<Button>().enabled = true;
                         //CurrentButton.GetComponent<Image>().color = Color.gray;
                     }
 
@@ -451,11 +470,12 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         for (int i = 0; i < WaveData[Round].WaveOrder.Count; i++)
         {
 
-            if (WaveData[Round].WaveOrder[i].AmountOfEnemy <= 1)
+            if (WaveData[Round].WaveOrder[i].AmountOfEnemy <= 1) // optimisation?
             {
                 Enemies.Add(
                     Instantiate(WaveData[Round].WaveOrder[i].Enemy, StartPosition, Quaternion.identity).GetComponent<BaseEnemy>()
                     );
+                Enemies[Enemies.Count - 1].PathManager = this;
                 if (WaveData[Round].WaveOrder[i].EnemyCamo && Enemies[Enemies.Count - 1].CamoOverlay)
                 {
                     Enemies[Enemies.Count - 1].Camo = true;
@@ -469,6 +489,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                     Enemies.Add(
                     Instantiate(WaveData[Round].WaveOrder[i].Enemy, StartPosition, Quaternion.identity).GetComponent<BaseEnemy>()
                     );
+                    Enemies[Enemies.Count - 1].PathManager = this;
                     if (WaveData[Round].WaveOrder[i].EnemyCamo && Enemies[Enemies.Count - 1].CamoOverlay)
                     {
                         Enemies[Enemies.Count - 1].Camo = true;
@@ -592,7 +613,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             {
 
 
-                RoundStartButton.GetComponent<Image>().color = Color.white;
+                RoundStartButton.GetComponent<TextMeshProUGUI>().color = Color.darkSlateGray;
 
             }
             
@@ -637,8 +658,8 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 }
 
                     RoundStartButton.GetComponent<Button>().enabled = false;
-                    RoundStartButton.GetComponent<Image>().color = Color.red;
-                AutoStartButton.GetComponent<Image>().color = Color.red;
+                    RoundStartButton.GetComponent<TextMeshProUGUI>().color = Color.red;
+                AutoStartButton.GetComponent<TextMeshProUGUI>().color = Color.red;
                 AutoStartButton.GetComponent<Button>().enabled = false;
 
                
@@ -677,7 +698,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     {
         if (RoundText)
         {
-            RoundText.text = "Round " + Round.ToString();
+            RoundText.text = "Round " + (Round + 1).ToSafeString();
         }
     }
     public void HurtPlayer()
@@ -812,7 +833,11 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             // SelectedTower.ManualTargetPos = new Vector3(hit.point.x, SelectedTower.transform.position.y, hit.point.z);
             SelectedTower.ManualTargetPos = Point;
             SelectedTower.ManualTargetPosUI = Input.mousePosition;
+
             SelectedTower.transform.LookAt(SelectedTower.ManualTargetPos);
+           // SelectedTower.transform.eulerAngles = new Vector3(0, transform.rotation.eulerAngles.y, 0);
+
+            //SelectedTower.transform.LookAt(SelectedTower.ManualTargetPos);
            
         }
     }

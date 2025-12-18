@@ -28,7 +28,7 @@ public class BaseEnemy : MonoBehaviour
     public AudioClip HitSound;
     public AudioClip DeathSound;
     public AudioClip GlanceSound;
-    
+    public Color ParticleColour;
     //  public float SoundVolume = 0.75f;
 
 
@@ -62,8 +62,13 @@ public class BaseEnemy : MonoBehaviour
         }
 
         Health = MaxHealth;
+        OnStart();
     }
 
+    public Vector3 GetEnemyDestination()
+    {
+        return TargetPosition;
+    }
 
     public void SetTarget(Vector3 Target)
     {
@@ -72,6 +77,8 @@ public class BaseEnemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+
+        OnFixedTick();
         if (ReachedEndOfTrack == false)
         { 
         if (CurrentPath == 0)
@@ -181,6 +188,8 @@ public class BaseEnemy : MonoBehaviour
 
             if (Lead == false || Lead == true && CollidingProjectile.GetComponent<ProjectileBase>().LeadBreaking == true)
             {
+
+                OnTakeDamage(IncomingDamage, TargetingTower);
                 Health -= IncomingDamage;
                 if (IntendedTarget)
                 {
@@ -194,13 +203,51 @@ public class BaseEnemy : MonoBehaviour
                     TargetingTower.FindEnemy();
 
                 }
-                else if (Health > 0 && LayerOrder && LayerID < LayerOrder.LayerPopOrder.Count && IncomingDamage > 0) //NEED A SQUELCH SOUND FOR QUARINTINER OR SOMETHING
+                // else if (Health > 0 && LayerOrder && LayerID < LayerOrder.LayerPopOrder.Count && IncomingDamage > 0) //NEED A SQUELCH SOUND FOR QUARINTINER OR SOMETHING
+                else if (Health > 0  && IncomingDamage > 0)
                 {
                     if (HitSound && GetComponent<AudioSource>())
                     {
                         GetComponent<AudioSource>().PlayOneShot(HitSound);
                     }
-                    LayerSwap();
+                    if ( LayerOrder && LayerID < LayerOrder.LayerPopOrder.Count)
+                    {
+                        LayerSwap();
+                    }
+                    else
+                    {
+                        if (GetComponent<ParticleSystem>())
+                        {
+                            /* // commented out 'cause this is for no layers
+                            ParticleSystem ps = GetComponent<ParticleSystem>();
+
+                            ParticleSystem.MainModule main = ps.main;
+
+                            Debug.Log("CHANGE COLOUR");
+                            if (this.GetComponent<MeshRenderer>())
+                            {
+                                main.startColor = this.GetComponent<MeshRenderer>().material.color;
+                            } */
+                            if (GetComponent<ParticleSystem>())
+                            {
+                                ParticleSystem ps = GetComponent<ParticleSystem>();
+                                ParticleSystem.MainModule main = ps.main;
+
+                               // Debug.Log("CHANGE COLOUR");
+                                main.startColor = ParticleColour;
+
+                                GetComponent<ParticleSystem>().Play();
+                                // can't  do this via the lower method. Why? Who knows.
+                                //  GetComponent<ParticleSystem>().main.startColor = this.GetComponent<MeshRenderer>().material.color;
+                            }
+
+                            // can't  do this via the lower method. Why? Who knows.
+                            //  GetComponent<ParticleSystem>().main.startColor = this.GetComponent<MeshRenderer>().material.color;
+                        }
+                    }
+
+
+
                 }
             }
             else
@@ -226,10 +273,8 @@ public class BaseEnemy : MonoBehaviour
             ParticleSystem.MainModule main = ps.main;
 
             Debug.Log("CHANGE COLOUR");
-            if (this.GetComponent<MeshRenderer>())
-            {
-                main.startColor = this.GetComponent<MeshRenderer>().material.color;
-            }
+            main.startColor = ParticleColour;
+            
             GetComponent<ParticleSystem>().Play();
             // can't  do this via the lower method. Why? Who knows.
             //  GetComponent<ParticleSystem>().main.startColor = this.GetComponent<MeshRenderer>().material.color;
@@ -243,6 +288,8 @@ public class BaseEnemy : MonoBehaviour
 
         if (LayerID >= 0)
         {
+
+            ParticleColour = LayerOrder.LayerPopOrder[LayerID].GetComponent<BaseEnemy>().ParticleColour;
 
             if (this.GetComponent<MeshRenderer>())
             {
@@ -354,19 +401,20 @@ public class BaseEnemy : MonoBehaviour
 
     public virtual void KillEnemy()
     {
-        
-            if (GetComponent<ParticleSystem>())
-            {
-                ParticleSystem ps = GetComponent<ParticleSystem>();
-                ParticleSystem.MainModule main = ps.main;
 
-                Debug.Log("CHANGE COLOUR");
-                main.startColor = this.GetComponent<MeshRenderer>().material.color;
-                GetComponent<ParticleSystem>().Play();
-                // can't  do this via the lower method. Why? Who knows.
-                //  GetComponent<ParticleSystem>().main.startColor = this.GetComponent<MeshRenderer>().material.color;
-            }
-            Debug.Log("KILL ENEMY");
+        if (GetComponent<ParticleSystem>())
+        {
+            ParticleSystem ps = GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule main = ps.main;
+
+            Debug.Log("CHANGE COLOUR");
+            main.startColor = ParticleColour;
+
+            GetComponent<ParticleSystem>().Play();
+            // can't  do this via the lower method. Why? Who knows.
+            //  GetComponent<ParticleSystem>().main.startColor = this.GetComponent<MeshRenderer>().material.color;
+        }
+        Debug.Log("KILL ENEMY");
             //Destroy(gameObject);
             PathManager.Money += MoneyOnDeath;
             PathManager.UpdateMoneyCounter();
@@ -384,5 +432,14 @@ public class BaseEnemy : MonoBehaviour
 
 
     }
+    public virtual void OnFixedTick()
+    {
 
+
+    }
+    public virtual void OnStart()
+    {
+
+
+    }
 }

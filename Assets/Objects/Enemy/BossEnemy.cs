@@ -23,6 +23,8 @@ public class BossEnemy : BaseEnemy
             // can't  do this via the lower method. Why? Who knows.
             //  GetComponent<ParticleSystem>().main.startColor = this.GetComponent<MeshRenderer>().material.color;
         }
+        // StartCoroutine("BossEnemySpawn");
+        BossEnemySpawn();
         Debug.Log("KILL ENEMY");
         //Destroy(gameObject);
         PathManager.Money += MoneyOnDeath;
@@ -30,22 +32,41 @@ public class BossEnemy : BaseEnemy
         PathManager.RemoveEnemies(gameObject); // kill here to properly count enemies
 
 
-        StartCoroutine("BossEnemySpawn");
+      
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            BossEnemySpawn();
+        }
+    }
 
+    void BossEnemySpawn()
+    {
+        for (int i = 0; i < EnemiesToSpawnOnDefeat.Count; i++)
+        {//why did i have it at start pos and not this pos?
+            PathManager.Enemies.Add(
+                    Instantiate(EnemiesToSpawnOnDefeat[i], transform.position, Quaternion.identity).GetComponent<BaseEnemy>()
+                    );
+            PathManager.Enemies[PathManager.Enemies.Count - 1].CurrentPath = CurrentPath;
+        }
+       }
 
-
+    /*
     IEnumerator BossEnemySpawn()
     {
         for (int i = 0; i < EnemiesToSpawnOnDefeat.Count; i++)
-        {
+        {//why did i have it at start pos and not this pos?
             PathManager.Enemies.Add(
-                    Instantiate(EnemiesToSpawnOnDefeat[i], PathManager.StartPosition, Quaternion.identity).GetComponent<BaseEnemy>()
+                    Instantiate(EnemiesToSpawnOnDefeat[i], transform.position, Quaternion.identity).GetComponent<BaseEnemy>()
                     );
+            PathManager.Enemies[PathManager.Enemies.Count - 1].CurrentPath = CurrentPath;
             yield return new WaitForSeconds(0.25f);
         }
-        // Code goes here!
+     
     }
+    */
 
 }

@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LayerPopOrder:
   - {fileID: 647415822513163612, guid: 5781e8f3ba897544fb3f963c30bbe7e8, type: 3}
-  - {fileID: 647415822513163612, guid: 43d3238587f9d2a4ea0a2e7073a0aec9, type: 3}
-  - {fileID: 647415822513163612, guid: 759743f9bb2a01b4da594476260049a8, type: 3}
+  - {fileID: 647415822513163612, guid: 55e2821c2b8871e42ada91df88ace183, type: 3}
+  - {fileID: 647415822513163612, guid: 3e92f578ede04de4db538c74f8958740, type: 3}
+  - {fileID: 647415822513163612, guid: 555e528da606d0649aaff2aeb7854a3f, type: 3}
+  - {fileID: 647415822513163612, guid: 835f5054c2447044284ec6785af035ac, type: 3}
   - {fileID: 647415822513163612, guid: 0afd603a03dc7d849aacf576a2fc686d, type: 3}

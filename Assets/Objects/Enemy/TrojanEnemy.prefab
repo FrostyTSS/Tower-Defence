@@ -69,6 +69,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -90,6 +92,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -233,6 +236,8 @@ ParticleSystemRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -254,6 +259,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -5053,7 +5059,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PathManager: {fileID: 0}
   CurrentPath: 0
-  Health: 1
+  MaxHealth: 5
+  Health: 5
   MaxSpeed: 1
   CurrentSpeed: 0
   CurrentSpeedModifier: 1
@@ -5073,9 +5080,9 @@ MonoBehaviour:
   EnemiesToSpawnOnDefeat:
   - {fileID: 647415822513163612, guid: 5781e8f3ba897544fb3f963c30bbe7e8, type: 3}
   - {fileID: 647415822513163612, guid: 5781e8f3ba897544fb3f963c30bbe7e8, type: 3}
-  - {fileID: 647415822513163612, guid: 5781e8f3ba897544fb3f963c30bbe7e8, type: 3}
-  - {fileID: 647415822513163612, guid: 5781e8f3ba897544fb3f963c30bbe7e8, type: 3}
-  - {fileID: 647415822513163612, guid: 5781e8f3ba897544fb3f963c30bbe7e8, type: 3}
+  - {fileID: 647415822513163612, guid: 3e92f578ede04de4db538c74f8958740, type: 3}
+  - {fileID: 647415822513163612, guid: 55e2821c2b8871e42ada91df88ace183, type: 3}
+  - {fileID: 647415822513163612, guid: 55e2821c2b8871e42ada91df88ace183, type: 3}
 --- !u!1 &4300379622499593526
 GameObject:
   m_ObjectHideFlags: 0
@@ -5128,6 +5135,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5149,6 +5158,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 4
@@ -5215,6 +5225,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5236,6 +5248,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
