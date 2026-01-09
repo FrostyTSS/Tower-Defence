@@ -43,11 +43,15 @@ public class BaseTower : MonoBehaviour
     public float DelayTimer = 1; // only public for EMP
     public GameObject ProjectileType;
     public List<ProjectileBase> ProjectileList;
-    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     //to do: strong targeting
 
+
+    //abilities
+    public TowerAbility Ability;
+    public float TowerAbilityCooldown = 0;
 
     private void OnMouseDown()
     {
@@ -102,19 +106,45 @@ public class BaseTower : MonoBehaviour
         DelayTimer = DelayTime;
     }
 
+    public void UseAbility()
+    {
+        if (TowerAbilityCooldown <= 0)
+        {
+            TowerAbilityCooldown = Ability.Cooldown;
+            Ability.OnUse(this);
+        }
+    }
+
     // Update is called once per frame
     //  public virtual void  FixedUpdate()
     void FixedUpdate()
     {
-        
+        if (DelayTimer > 0)
+        {
+            DelayTimer -= Time.fixedDeltaTime;
+        }
+        if (TowerAbilityCooldown > 0)
+        {
+            TowerAbilityCooldown -= Time.fixedDeltaTime;
+            if (TowerAbilityCooldown < 0)
+            {
+                TowerAbilityCooldown = 0;
+            }
+        }
 
         if (LevelPath && LevelPath.WaveInProgress)
         {
             //moved here so you don't have that awkward pause everytime it swaps targets
+            /*
             if (DelayTimer > 0)
             {
                 DelayTimer -= Time.fixedDeltaTime;
             }
+            if (TowerAbilityCooldown > 0)
+            {
+                TowerAbilityCooldown -= Time.fixedDeltaTime;
+            }
+            */
 
             if (!CurrentTarget && Searching == false && CurrentTargetingMode != TargetMode.Manual)
             {

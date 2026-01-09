@@ -66,10 +66,14 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public Canvas UICanvas;
     public GameObject TestObj;
 
+    public Camera OrthoCam;
  
     public float ThemeFadeTime = 1.25f;
      bool Fading = false;
 
+
+    public TextMeshProUGUI AbilityTimerText;
+    public Image AbilityImage;
 
     public int Money = 0;
     public float Lives = 100;
@@ -97,6 +101,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         }
         StartPosition = WaveSpawnpoint.position;
         ShowUpgradeUI(false);
+        ShowAbility(false);
         RangeVisual.SetActive(false);
     }
 
@@ -294,6 +299,35 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         }
     }
 
+
+    public void ShowAbility(bool Active)
+    {
+        if (Active)
+        {
+            if (SelectedTower && SelectedTower.Ability)
+            {
+                AbilityImage.sprite = SelectedTower.Ability.AbilityImage;
+               
+
+            }
+        }
+        else
+        {
+            //UpgradeUIInitalPos.parent.gameObject.SetActive(false);
+            AbilityImage.color = new Color(0f, 0f, 0f, 0f); //dont crash pls :)
+            AbilityTimerText.text = "No Tower Selected";
+        }
+    }
+
+    public void UseAbility()
+    {
+        Debug.Log("Ability Use");
+        if (SelectedTower)
+        {
+            SelectedTower.UseAbility();
+        }
+    }
+
     public void ChangeTargetMode(int ID)
     {
         if (SelectedTower)
@@ -395,6 +429,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 //SelectedTowerMat = SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().material;
                 SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().color = GlowColour;
             TargetingSettingsUIImage.sprite = AimTargetVisual.GetComponent<TargetSprite>().GoodTarget;
+            TargetingSettingsUIImage.color = Color.white;
             InitRangeVisual(SelectedObject);
             ToggleTargetOptions(true);
 
@@ -415,6 +450,10 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 AimTargetVisual.SetActive(false);
             }
             ShowUpgradeUI(true);
+            if (SelectedTower.Ability)
+            {
+                ShowAbility(true);
+            }
                 Debug.Log("Selected!");
             }
          //   else if (SelectedTower)
@@ -422,6 +461,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             {
             RangeVisual.SetActive(false);
             TargetingSettingsUIImage.sprite = AimTargetVisual.GetComponent<TargetSprite>().BadTarget;
+            TargetingSettingsUIImage.color = Color.gray;
             SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
               //  SelectedTowerMat = null;
                 SelectedTower = null;
@@ -429,6 +469,9 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             ToggleTargetOptions(false);
             Debug.Log("Unselected!");
             AimTargetVisual.SetActive(false);
+            
+                ShowAbility(false);
+            
         }
             
 
@@ -916,7 +959,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 Gizmos.DrawSphere(point, 1.2f);
                 if (SelectedTower)
                 {
-                    Debug.Log(Vector3.Distance(point, SelectedTower.transform.position));
+                   // Debug.Log(Vector3.Distance(point, SelectedTower.transform.position));
                     // Draw a yellow sphere at the transform's position
                     Gizmos.color = new Color(1, 0.7f, 0.7f, 0.35f);
                     Gizmos.DrawSphere(SelectedTower.transform.position, SelectedTower.Range);
@@ -1081,10 +1124,35 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     // Update is called once per frame
     void Update()
     {
+
+        if (SelectedTower && SelectedTower.Ability)
+        {
+            // AbilityImage.sprite = SelectedTower.Ability.AbilityImage;
+            if (SelectedTower.TowerAbilityCooldown > 0)
+            {
+                AbilityTimerText.text = ((short)SelectedTower.TowerAbilityCooldown) + "S left";
+            }
+            else
+            {
+                AbilityTimerText.text = "READY!";
+            }
+            if (SelectedTower.TowerAbilityCooldown <= 0)
+            {
+                AbilityImage.color = Color.white;
+            }
+            else
+            {
+                AbilityImage.color = BaseButtonColour;
+            }
+
+        }
+
+
         if (Input.GetKeyDown(KeyCode.Mouse0) && SelectedTower) // if clicked off tower reset?
         {
-            Debug.Log("Click");
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
+           // Debug.Log("Click");
+            //   Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
+            Ray ray = OrthoCam.ScreenPointToRay(Input.mousePosition); // Construct a ray from the current mouse coordinates
             RaycastHit hit;
             int TowerLayerID = LayerMask.NameToLayer("Tower");
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
@@ -1113,7 +1181,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             //TrueMousePosition
             Vector2 mousepos = Input.mousePosition;
             mousepos.x += 0.5f; mousepos.y += 0.5f;
-            Ray ray = Camera.main.ScreenPointToRay(mousepos);
+            Ray ray = OrthoCam.ScreenPointToRay(mousepos);
              
 
             RaycastHit hit;
