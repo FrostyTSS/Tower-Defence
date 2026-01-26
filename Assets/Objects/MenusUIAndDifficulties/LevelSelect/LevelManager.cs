@@ -253,10 +253,17 @@ public class LevelManager : MonoBehaviour
                 {
 
                 DifficultyInfo CurrentlyCycledDifficulty = ListOfDifficulties.GlobalDifficultyList[j];
+                /*
                 Vector3 DifficultyPos = new Vector3(26.5f, 35.5f, 0);
                 //MedalPos.x = -40 + (j * 20);
                 DifficultyPos.y += (-20 * j);
+                */
+                Vector3 DifficultyPos = new Vector3(-42.5f, -33.2f, 0);
+                //MedalPos.x = -40 + (j * 20);
+                DifficultyPos.x += (+22.5f * j);
                 GameObject ButtonRef = Instantiate(ButtonTemplate, Vector3.zero, Quaternion.identity, MenuSwapScript.MenuObjList[2].transform);
+               
+                ButtonRef.GetComponent<RectTransform>().sizeDelta = new Vector2(65, 35);
                 ButtonRef.GetComponent<RectTransform>().anchoredPosition = DifficultyPos;
                 if (CurrentLevel.DifficultiesCleared.Count < j && CurrentLevel.DifficultiesCleared[j].DifficultyClear == true)
                 {
