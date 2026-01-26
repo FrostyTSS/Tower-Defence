@@ -16,8 +16,17 @@ public class ShowHintOverlay : MonoBehaviour, IPointerEnterHandler, IPointerExit
         {
             GameObject OverlayRef = PathHolder.instance.HintOverlay;
             OverlayRef.SetActive(true);
-           // OverlayRef.GetComponent<RectTransform>().position = this.GetComponent<RectTransform>().position += new Vector3(0,0, 0);
-            if (this.GetComponent<ApplyUpgrade>())
+            // OverlayRef.GetComponent<RectTransform>().position = this.GetComponent<RectTransform>().position += new Vector3(0,0, 0);
+            if (LevelManager.instance)
+            {
+                LevelManager LevelMnger = LevelManager.instance;
+               // GameObject OverlayRef = PathHolder.instance.HintOverlay;
+                OverlayRef.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = LevelMnger.CurrentLevel.DisplayedLevelName;
+                OverlayRef.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = LevelMnger.CurrentLevel.LevelDescription;
+                OverlayRef.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Current Difficulty: " + LevelMnger.CurrentDifficulty;
+            }
+            
+            else if (this.GetComponent<ApplyUpgrade>())
             {
                 ApplyUpgrade UpgradeRef = this.GetComponent<ApplyUpgrade>();
                 OverlayRef.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = UpgradeRef.UpgradeData.UpgradeName;
@@ -36,6 +45,10 @@ public class ShowHintOverlay : MonoBehaviour, IPointerEnterHandler, IPointerExit
                 // OverlayRef.GetComponent<RectTransform>().position = this.GetComponent<RectTransform>().position + new Vector3(25, 0, 0);
               //  OverlayRef.GetComponent<RectTransform>().anchoredPosition = new Vector2(this.GetComponent<RectTransform>().anchoredPosition.x + 50, this.GetComponent<RectTransform>().anchoredPosition.y + 15);
             }
+            else
+            {
+                PathHolder.instance.HintOverlay.SetActive(false);
+            }
             //OverlayRef.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text //probs bad coding doing children like this
         }
         //Output to console the GameObject's name and the following message
@@ -47,7 +60,18 @@ public class ShowHintOverlay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         if (PathHolder.instance.HintOverlay)
         {
-            PathHolder.instance.HintOverlay.SetActive(false);
+            if (LevelManager.instance)
+            {
+                LevelManager LevelMnger = LevelManager.instance;
+                GameObject OverlayRef = PathHolder.instance.HintOverlay;
+                OverlayRef.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = LevelMnger.CurrentLevel.DisplayedLevelName;
+                OverlayRef.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = LevelMnger.CurrentLevel.LevelDescription;
+                OverlayRef.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Current Difficulty: " + LevelMnger.CurrentDifficulty;
+            }
+            else
+            {
+                PathHolder.instance.HintOverlay.SetActive(false);
+            }
         }
         //Output the following message with the GameObject's name
       //  Debug.Log("Cursor Exiting " + name + " GameObject");
@@ -55,7 +79,7 @@ public class ShowHintOverlay : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public bool CheckIfPrepared()
     {
-        if (PathHolder.instance.HintOverlay && this.GetComponent<ApplyUpgrade>() || PathHolder.instance.HintOverlay && this.GetComponent<TowerPlacement>())
+        if (PathHolder.instance.HintOverlay && this.GetComponent<ApplyUpgrade>() || PathHolder.instance.HintOverlay && this.GetComponent<TowerPlacement>() || LevelManager.instance && PathHolder.instance.HintOverlay)
         {
             return true;
         }

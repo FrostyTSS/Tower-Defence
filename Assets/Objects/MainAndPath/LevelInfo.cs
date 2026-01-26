@@ -16,6 +16,7 @@ public class LevelInfo : ScriptableObject
     public Sprite LevelIcon;
     public string DisplayedLevelName = "Temp";
     public string NameToLoad = "Temp";
+    public string LevelDescription = "Temp";
     public DifficultyList ListOfDifficulties;
 
     public List<DifficultyClearInfo> DifficultiesCleared;
