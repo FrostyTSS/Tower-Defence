@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static LevelInfo;
 
-
+//this is trash, don't make your HUD and main scripts into one script next time you idiot!
 [Serializable]
 public class LevelClearInfoSerializable
 {
@@ -234,7 +234,10 @@ public class LevelManager : MonoBehaviour
             MenuSwapScript.SwapShownMenu(2);
 
             //messy woo
-            MenuSwapScript.MenuObjList[2].GetComponentInChildren<TextMeshProUGUI>().text = CurrentLevel.DisplayedLevelName;
+            // MenuSwapScript.MenuObjList[2].GetComponentInChildren<TextMeshProUGUI>().text = CurrentLevel.DisplayedLevelName;
+            Debug.Log(MenuSwapScript.MenuObjList[2].transform.GetChild(0).GetChild(1).name);
+            MenuSwapScript.MenuObjList[2].transform.GetChild(0).transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = CurrentLevel.DisplayedLevelName;
+            MenuSwapScript.MenuObjList[2].transform.GetChild(0).transform.GetChild(3).GetComponentInChildren<TextMeshProUGUI>().text = CurrentLevel.LevelDescription;
             MenuSwapScript.MenuObjList[2].transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = CurrentLevel.LevelIcon; // VERY BAD PROGRAMMING. not to self: don't be an idiot and put your level loading and menu loading scripts in the same file.
 
             /*

@@ -23,7 +23,7 @@ public class ShowHintOverlay : MonoBehaviour, IPointerEnterHandler, IPointerExit
                // GameObject OverlayRef = PathHolder.instance.HintOverlay;
                 OverlayRef.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = LevelMnger.CurrentLevel.DisplayedLevelName;
                 OverlayRef.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = LevelMnger.CurrentLevel.LevelDescription;
-                OverlayRef.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Current Difficulty: " + LevelMnger.CurrentDifficulty;
+                OverlayRef.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Difficulty: " + LevelMnger.CurrentDifficulty;
             }
             
             else if (this.GetComponent<ApplyUpgrade>())

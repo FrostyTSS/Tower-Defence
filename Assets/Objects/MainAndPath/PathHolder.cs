@@ -730,18 +730,21 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
 
     public void UpdateLivesCounter()
     {
-        HPText.text = "HP" + Lives.ToString();
+        // HPText.text = "HP" + Lives.ToSafeString();
+        HPText.text = Lives.ToSafeString();
     }
     public void UpdateMoneyCounter()
     {
-        MoneyText.text = "$" + Money.ToString();
+        //MoneyText.text = "$" + Money.ToString();
+        MoneyText.text =  Money.ToSafeString();
     }
 
     public void UpdateRoundCounter()
     {
         if (RoundText)
         {
-            RoundText.text = "Round " + (Round + 1).ToSafeString();
+            RoundText.text = (Round + 1).ToSafeString();
+            //RoundText.text = "Round " + (Round + 1).ToSafeString();
         }
     }
     public void HurtPlayer()

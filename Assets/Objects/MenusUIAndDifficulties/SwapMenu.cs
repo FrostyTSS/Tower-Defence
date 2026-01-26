@@ -61,6 +61,7 @@ public class SwapMenu : MonoBehaviour
     {
         if (LevelManager.instance)
         {
+            Debug.Log("QUIT");
             LevelManager.instance.QuitGame();
         }
     }
