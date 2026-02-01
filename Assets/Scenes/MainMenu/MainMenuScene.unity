@@ -272,7 +272,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &80695372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,7 +476,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &203496006
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1571,11 +1571,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9131370683088343614, guid: 329b125000fbb6e4c96f60b8048015a9, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 31.83759
+      value: 25.33081
       objectReference: {fileID: 0}
     - target: {fileID: 9131370683088343614, guid: 329b125000fbb6e4c96f60b8048015a9, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 61.25653
+      value: 48.63227
       objectReference: {fileID: 0}
     - target: {fileID: 9131370683088343614, guid: 329b125000fbb6e4c96f60b8048015a9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1607,11 +1607,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9131370683088343614, guid: 329b125000fbb6e4c96f60b8048015a9, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 47.82787
+      value: 49.02886
       objectReference: {fileID: 0}
     - target: {fileID: 9131370683088343614, guid: 329b125000fbb6e4c96f60b8048015a9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -49.020893
+      value: -51.34759
       objectReference: {fileID: 0}
     - target: {fileID: 9131370683088343614, guid: 329b125000fbb6e4c96f60b8048015a9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3230,7 +3230,10 @@ MonoBehaviour:
   m_text: 'ADD ANIMATED GAMEPLAY TO LEVEL ICON OR BACKGROUND,
 
     SCROLLING CODE
-    BACKGROUND, ANIMATION, CREDITS, EDWARD BLINKING ETC'
+    BACKGROUND, ANIMATION, CREDITS, EDWARD BLINKING ETC
+
+    CHANGE MUSIC BACK TO
+    TITLE 1'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3338,7 +3341,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 2b9ff4b6e2824c14e8a89ef80bc38062, type: 3}
+  m_Resource: {fileID: 8300000, guid: 49db7143ca73f7e4f8584402ebfbb644, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.3
   m_Pitch: 1
@@ -4883,11 +4886,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8805561856504533120, guid: a7224c0d0e8b37a408f748c470e9698c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 79.4698
       objectReference: {fileID: 0}
     - target: {fileID: 8805561856504533120, guid: a7224c0d0e8b37a408f748c470e9698c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 79.9611
       objectReference: {fileID: 0}
     - target: {fileID: 8805561856504533120, guid: a7224c0d0e8b37a408f748c470e9698c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4919,11 +4922,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8805561856504533120, guid: a7224c0d0e8b37a408f748c470e9698c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 865
+      value: 886.60803
       objectReference: {fileID: 0}
     - target: {fileID: 8805561856504533120, guid: a7224c0d0e8b37a408f748c470e9698c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -435
+      value: -456.09097
       objectReference: {fileID: 0}
     - target: {fileID: 8805561856504533120, guid: a7224c0d0e8b37a408f748c470e9698c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
