@@ -1121,7 +1121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1589,6 +1589,7 @@ MonoBehaviour:
   PlacedTowerRotation: {x: 0, y: 90, z: 0}
   HolderCanvas: {fileID: 3634823045003662678}
   TowerToSpawn: {fileID: 5398307330741760428, guid: 0286581ce59a83e4788207c93216c898, type: 3}
+  TowerName: Central Server
   Description: Buff nearby towers.
   Cost: 25
   PickupSound: {fileID: 8300000, guid: 740f493f21765a24dac11665b84463b7, type: 3}
@@ -1963,7 +1964,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7311321, b: 0.7311321, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3344,6 +3345,7 @@ MonoBehaviour:
   PlacedTowerRotation: {x: 0, y: 90, z: 0}
   HolderCanvas: {fileID: 3634823045003662678}
   TowerToSpawn: {fileID: 5398307330741760428, guid: 884030cb00ad46444a3a72c376d0c69d, type: 3}
+  TowerName: File Shredder
   Description: Inhales enemies and shreds 'em.
   Cost: 25
   PickupSound: {fileID: 8300000, guid: 740f493f21765a24dac11665b84463b7, type: 3}
@@ -3690,7 +3692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7311321, b: 0.7311321, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3890,7 +3892,9 @@ MonoBehaviour:
   PlacedTowerRotation: {x: 0, y: 90, z: 0}
   HolderCanvas: {fileID: 3634823045003662678}
   TowerToSpawn: {fileID: 5398307330741760428, guid: bb8b9df04c430fb4fbbe7d94997d42dc, type: 3}
-  Description: Can hit anywhere on the map.
+  TowerName: Malware Hitman
+  Description: Can hit anywhere on the map with their trusty (metaphorical) sniper
+    rifle.
   Cost: 25
   PickupSound: {fileID: 8300000, guid: 740f493f21765a24dac11665b84463b7, type: 3}
   DropoffSound: {fileID: 8300000, guid: b7b86ca7f6c6c9447b600d34860fc066, type: 3}
@@ -5603,7 +5607,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7311321, b: 0.7311321, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6028,6 +6032,7 @@ MonoBehaviour:
   PlacedTowerRotation: {x: 0, y: 90, z: 0}
   HolderCanvas: {fileID: 3634823045003662678}
   TowerToSpawn: {fileID: 5398307330741760428, guid: 0806bc3be3e4bf546b122bef20fde0a4, type: 3}
+  TowerName: Data Scanner
   Description: AOE coverage.
   Cost: 10
   PickupSound: {fileID: 8300000, guid: 740f493f21765a24dac11665b84463b7, type: 3}
@@ -8156,6 +8161,7 @@ MonoBehaviour:
   PlacedTowerRotation: {x: 0, y: 90, z: 0}
   HolderCanvas: {fileID: 3634823045003662678}
   TowerToSpawn: {fileID: 5398307330741760428, guid: 0465f853e9f568543981749298e213c2, type: 3}
+  TowerName: Defender
   Description: Basic defender.
   Cost: 5
   PickupSound: {fileID: 8300000, guid: 740f493f21765a24dac11665b84463b7, type: 3}
@@ -8468,7 +8474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -9806,7 +9812,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7311321, b: 0.7311321, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -10339,7 +10345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12876,6 +12882,7 @@ MonoBehaviour:
   PlacedTowerRotation: {x: 0, y: 90, z: 0}
   HolderCanvas: {fileID: 3634823045003662678}
   TowerToSpawn: {fileID: 5398307330741760428, guid: b648daa6bf231cd4987b32a203fea2cd, type: 3}
+  TowerName: Firewall
   Description: Knock back incoming enemies.
   Cost: 25
   PickupSound: {fileID: 8300000, guid: 740f493f21765a24dac11665b84463b7, type: 3}
@@ -13122,6 +13129,7 @@ MonoBehaviour:
   PlacedTowerRotation: {x: 0, y: 90, z: 0}
   HolderCanvas: {fileID: 3634823045003662678}
   TowerToSpawn: {fileID: 5398307330741760428, guid: d64c7eeb27dd1ee4c9026ad94cdc0693, type: 3}
+  TowerName: Quarantiner
   Description: Slows down incoming enemies.
   Cost: 25
   PickupSound: {fileID: 8300000, guid: 740f493f21765a24dac11665b84463b7, type: 3}
@@ -16220,6 +16228,7 @@ MonoBehaviour:
   PlacedTowerRotation: {x: 0, y: 90, z: 0}
   HolderCanvas: {fileID: 3634823045003662678}
   TowerToSpawn: {fileID: 5398307330741760428, guid: e0000cf8b45d1bc40bc114af6582e024, type: 3}
+  TowerName: Ethernet Ballista
   Description: Pierces through enemies.
   Cost: 25
   PickupSound: {fileID: 8300000, guid: 740f493f21765a24dac11665b84463b7, type: 3}
@@ -17350,14 +17359,14 @@ RectTransform:
   m_GameObject: {fileID: 8432520144602571654}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.38303024, y: 0.21421574, z: 0.16447888}
+  m_LocalScale: {x: 0.39996016, y: 0.23207222, z: 0.17174885}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1206258682346973030}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -935.6, y: 467.5}
+  m_AnchoredPosition: {x: -935.6, y: 465.3}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3076100086878525176

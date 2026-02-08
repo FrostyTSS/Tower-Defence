@@ -15,6 +15,7 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     public Canvas HolderCanvas;
     Transform HolderObject;
     public GameObject TowerToSpawn;
+    public string TowerName;
     public string Description;
     public int Cost;
 

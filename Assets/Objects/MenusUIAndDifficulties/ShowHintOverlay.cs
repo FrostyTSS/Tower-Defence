@@ -38,7 +38,15 @@ public class ShowHintOverlay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             else if (this.GetComponent<TowerPlacement>())
             {
                 TowerPlacement TowerInfoRef = this.GetComponent<TowerPlacement>();
-                OverlayRef.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = TowerInfoRef.TowerToSpawn.name; // lazy, fix later
+                if (TowerInfoRef.TowerName != "")
+                {
+                    OverlayRef.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = TowerInfoRef.TowerName; // lazy, fix later
+                }
+                else
+                {
+                    OverlayRef.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = TowerInfoRef.TowerToSpawn.name; // lazy, fix later
+                }
+                   
                 OverlayRef.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = TowerInfoRef.Description;
                 OverlayRef.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "$" + TowerInfoRef.Cost;
                 // i hate ui code
