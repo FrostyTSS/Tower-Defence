@@ -74,6 +74,9 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
 
     public TextMeshProUGUI AbilityTimerText;
     public Image AbilityImage;
+    public GameObject AbilityTimer3D;
+    public AudioClip AbilityCooldownFailNoise;
+    public Image AbilityTimerGif;
 
     public int Money = 0;
     public float Lives = 100;
@@ -166,6 +169,12 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             RoundText.text = "Setup Your Defenses!";
         }
         ToggleTargetOptions(false);
+
+
+        if (AbilityTimerGif)
+        {
+            AbilityTimerGif.enabled = false;
+        }
         //StartNewRound();
     }
 
@@ -307,7 +316,10 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             if (SelectedTower && SelectedTower.Ability)
             {
                 AbilityImage.sprite = SelectedTower.Ability.AbilityImage;
-               
+               if (AbilityTimerGif && SelectedTower.TowerAbilityCooldown > 0)
+                {
+                    AbilityTimerGif.enabled = true;
+                }
 
             }
         }
@@ -316,6 +328,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             //UpgradeUIInitalPos.parent.gameObject.SetActive(false);
             AbilityImage.color = new Color(0f, 0f, 0f, 0f); //dont crash pls :)
             AbilityTimerText.text = "No Tower Selected";
+            AbilityTimerGif.enabled = false;
         }
     }
 
@@ -324,7 +337,24 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         Debug.Log("Ability Use");
         if (SelectedTower)
         {
-            SelectedTower.UseAbility();
+            if (SelectedTower.TowerAbilityCooldown <= 0)
+            {
+                GameObject AbilityTextRef = Instantiate(AbilityTimer3D, SelectedTower.transform.position + AbilityTimer3D.transform.position, AbilityTimer3D.transform.rotation);
+
+                SelectedTower.GetComponent<BaseTower>().AbilityTimerText = AbilityTextRef.GetComponent<TextMeshPro>();
+
+                if (SelectedTower.Ability.AbilityActivateNoise)
+                {
+                    
+                    GetComponent<AudioSource>().PlayOneShot(SelectedTower.Ability.AbilityActivateNoise);
+                }
+                SelectedTower.UseAbility();
+                AbilityTimerGif.enabled = true;
+            }
+            else
+            {
+                GetComponent<AudioSource>().PlayOneShot(AbilityCooldownFailNoise);
+            }
         }
     }
 
@@ -1137,6 +1167,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             }
             else
             {
+                AbilityTimerGif.enabled = false;
                 AbilityTimerText.text = "READY!";
             }
             if (SelectedTower.TowerAbilityCooldown <= 0)

@@ -2,6 +2,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using TMPro;
 
 //using static UnityEditor.Rendering.CameraUI;
 
@@ -17,11 +18,12 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     public string Description;
     public int Cost;
 
-    //noises for dragging.
+    //noises for dragging. God I should've made a placement manager...
     public AudioClip PickupSound;
     public AudioClip DropoffSound;
     public float SoundVolume = 0.75f;
     Vector2 OriginalSpriteDelta;
+    //public GameObject AbilityTimer3D;
     void Start()
     {
 
@@ -215,7 +217,15 @@ public class TowerPlacement : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
                         TowerRef.GetComponent<BaseTower>().LevelPath = PathHolder.instance; // get pathholder if missing
                     }
                     PathHolder.instance.PlacedTowers.Add(TowerRef.GetComponent<BaseTower>());
-
+                    /*
+                    if (AbilityTimer3D)
+                    {
+                        GameObject AbilityTextRef = Instantiate(AbilityTimer3D, TowerRef.transform);
+                        AbilityTextRef.
+                        TowerRef.GetComponent<BaseTower>().AbilityTimerText = AbilityTextRef.GetComponent<TextMeshPro>();
+                        AbilityTextRef.SetActive(false);
+                    }
+                    */
 
                     //   {
 

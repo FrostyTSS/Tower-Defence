@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -43,6 +44,7 @@ public class BaseTower : MonoBehaviour
     public float DelayTimer = 1; // only public for EMP
     public GameObject ProjectileType;
     public List<ProjectileBase> ProjectileList;
+    public TextMeshPro AbilityTimerText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -111,24 +113,41 @@ public class BaseTower : MonoBehaviour
         if (TowerAbilityCooldown <= 0)
         {
             TowerAbilityCooldown = Ability.Cooldown;
+            AbilityTimerText.gameObject.SetActive(true);
+            
             Ability.OnUse(this);
         }
     }
 
     // Update is called once per frame
+    private void LateUpdate()
+    {
+        if (AbilityTimerText)
+        {
+            //AbilityTimerText.transform.localRotation = Quaternion.Euler(90, 0, -90);
+        }
+        }
     //  public virtual void  FixedUpdate()
     void FixedUpdate()
     {
         if (DelayTimer > 0)
         {
+            
             DelayTimer -= Time.fixedDeltaTime;
         }
         if (TowerAbilityCooldown > 0)
         {
+            if (AbilityTimerText)
+            {
+               
+                AbilityTimerText.text = TowerAbilityCooldown.ToString("#.00") + " ";
+            }
             TowerAbilityCooldown -= Time.fixedDeltaTime;
             if (TowerAbilityCooldown < 0)
             {
                 TowerAbilityCooldown = 0;
+                Destroy(AbilityTimerText.gameObject);
+                AbilityTimerText = null;
             }
         }
 
