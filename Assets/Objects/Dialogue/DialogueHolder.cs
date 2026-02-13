@@ -6,7 +6,7 @@ using Yarn.Unity;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
-using UnityEditor.Rendering;
+//using UnityEditor.Rendering;
 
 
 //to do: Check testiomony/minigame/dialogue audio, beer bottle shooting minigame, new trailer. ADD SFX TO DOUG DIALOGUE

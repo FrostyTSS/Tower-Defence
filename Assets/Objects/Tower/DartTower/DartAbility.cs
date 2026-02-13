@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 
@@ -13,6 +14,7 @@ public class DartAbility : TowerAbility
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void OnUse(BaseTower TowerRef)
     {
+        SceneManager.LoadScene("MainMenuScene");
         Debug.Log("Swipe!");
         if (SwordSwipeObj)
         {

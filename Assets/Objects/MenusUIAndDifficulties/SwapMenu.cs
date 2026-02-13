@@ -6,7 +6,7 @@ public class SwapMenu : MonoBehaviour
 {
     public List<GameObject> MenuObjList = new List<GameObject>();
     public int CurrentMenuID = 0;
-
+    public GameObject DifficultySelectLevelPanel;
 
     public void SwapShownMenu(int MenuID)
     {

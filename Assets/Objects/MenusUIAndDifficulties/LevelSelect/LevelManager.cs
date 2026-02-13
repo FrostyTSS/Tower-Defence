@@ -232,14 +232,17 @@ public class LevelManager : MonoBehaviour
         if (MenuSwapScript)
         {
             MenuSwapScript.SwapShownMenu(2);
-
+            MenuSwapScript.DifficultySelectLevelPanel.transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = CurrentLevel.DisplayedLevelName;
+            MenuSwapScript.DifficultySelectLevelPanel.transform.GetChild(3).GetComponentInChildren<TextMeshProUGUI>().text = CurrentLevel.LevelDescription;
+            MenuSwapScript.DifficultySelectLevelPanel.transform.GetChild(0).GetComponent<Image>().sprite = CurrentLevel.LevelIcon;
             //messy woo
             // MenuSwapScript.MenuObjList[2].GetComponentInChildren<TextMeshProUGUI>().text = CurrentLevel.DisplayedLevelName;
+            /*
             Debug.Log(MenuSwapScript.MenuObjList[2].transform.GetChild(0).GetChild(1).name);
             MenuSwapScript.MenuObjList[2].transform.GetChild(0).transform.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = CurrentLevel.DisplayedLevelName;
             MenuSwapScript.MenuObjList[2].transform.GetChild(0).transform.GetChild(3).GetComponentInChildren<TextMeshProUGUI>().text = CurrentLevel.LevelDescription;
             MenuSwapScript.MenuObjList[2].transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = CurrentLevel.LevelIcon; // VERY BAD PROGRAMMING. not to self: don't be an idiot and put your level loading and menu loading scripts in the same file.
-
+            */
             /*
             LevelUIButton.onClick.AddListener(delegate { SelectLevelForDifficultyList(i); });
             LevelUIObj.GetComponentInChildren<TextMeshProUGUI>().text = CurrentlyCycledLevel.DisplayedLevelName;
@@ -249,7 +252,7 @@ public class LevelManager : MonoBehaviour
                 LevelUIButton.onClick.AddListener(delegate { SelectLevelForDifficultyList(i); });
                 LevelUIObj.GetComponentInChildren<TextMeshProUGUI>().text = CurrentlyCycledLevel.DisplayedLevelName;
             */
-                for (int j = 0; j < ListOfDifficulties.GlobalDifficultyList.Count; j++)
+            for (int j = 0; j < ListOfDifficulties.GlobalDifficultyList.Count; j++)
                 {
 
                 DifficultyInfo CurrentlyCycledDifficulty = ListOfDifficulties.GlobalDifficultyList[j];
@@ -258,9 +261,9 @@ public class LevelManager : MonoBehaviour
                 //MedalPos.x = -40 + (j * 20);
                 DifficultyPos.y += (-20 * j);
                 */
-                Vector3 DifficultyPos = new Vector3(-42.5f, -33.2f, 0);
+                Vector3 DifficultyPos = new Vector3(-22.5f, -33.2f, 0);
                 //MedalPos.x = -40 + (j * 20);
-                DifficultyPos.x += (+22.5f * j);
+                DifficultyPos.x += (+20.5f * j);
                 GameObject ButtonRef = Instantiate(ButtonTemplate, Vector3.zero, Quaternion.identity, MenuSwapScript.MenuObjList[2].transform);
                
                 ButtonRef.GetComponent<RectTransform>().sizeDelta = new Vector2(65, 35);

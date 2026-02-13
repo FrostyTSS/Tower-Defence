@@ -969,9 +969,11 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
         return output;
     }
     */
-   
+
+    /*
     void OnDrawGizmos()
     {
+        
         if (Application.isEditor)
             if (Camera.current == Camera.main || Camera.current == SceneView.lastActiveSceneView.camera)
             {
@@ -1150,9 +1152,11 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                         Debug.Log(Vector3.Distance(newpoint, SelectedTower.transform.position));
                     }
                 }
-                */
+                
             }
+
     }
+    */
 
     // Update is called once per frame
     void Update()

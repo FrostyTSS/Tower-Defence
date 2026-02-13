@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2c485d61ac2f474a9aa934ad970129c, type: 3}
-  m_Name: TempSceneInfo
+  m_Name: PhishingDocksLevelInfo
   m_EditorClassIdentifier: 
-  LevelIcon: {fileID: 21300000, guid: b656de9846e92d343bba1ba33e4a62e8, type: 3}
+  LevelIcon: {fileID: 21300000, guid: 6f805164abb1d404e8e289a65fe6ed44, type: 3}
   DisplayedLevelName: Phishing Docks
   NameToLoad: TemplateScene
   LevelDescription: Deal with low effort phishing attempts as a warm up. Just be
