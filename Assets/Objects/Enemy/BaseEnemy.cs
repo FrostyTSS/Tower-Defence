@@ -149,7 +149,7 @@ public class BaseEnemy : MonoBehaviour
                 TargetingTower.FindEnemy();
 
             }
-            else if (Health > 0 && LayerOrder && LayerID < LayerOrder.LayerPopOrder.Count)
+            else if (Health > 0 && LayerOrder && LayerID < LayerOrder.LayerPopOrder.Count && LayerID > 0)
             {
                 if (HitSound && GetComponent<AudioSource>())
                 {
@@ -210,7 +210,7 @@ public class BaseEnemy : MonoBehaviour
                     {
                         GetComponent<AudioSource>().PlayOneShot(HitSound);
                     }
-                    if ( LayerOrder && LayerID < LayerOrder.LayerPopOrder.Count)
+                    if ( LayerOrder && LayerID < LayerOrder.LayerPopOrder.Count && LayerID > 0)
                     {
                         LayerSwap();
                     }

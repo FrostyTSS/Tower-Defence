@@ -3,16 +3,38 @@ using UnityEngine;
 public class SpinForSprite : MonoBehaviour
 {
     public float Speed = 5f;
+    public bool Spin = false;
+   public float Timer = 0; // make private later
+    public float TimeToSpin = 5f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+   
+    // Update is called once per frame
+    void FixedUpdate()
     {
-        
+        if (Spin)
+        {
+            Timer += Time.fixedDeltaTime;
+            //Debug.Log(Timer);
+            transform.Rotate(new Vector3(0, Speed, 0), Space.World);
+            if (Timer >= TimeToSpin)
+            {
+                StopSpin();
+            }
+        }
+        //transform.SetLocalPositionAndRotation(transform.localPosition, Quaternion.Euler(0, (transform.rotation.eulerAngles.y + Time.deltaTime) * Speed, 0));
     }
 
-    // Update is called once per frame
-    void Update()
+    public void StartSpin()
     {
-        transform.Rotate(new Vector3(0, Speed, 0), Space.World);
-        //transform.SetLocalPositionAndRotation(transform.localPosition, Quaternion.Euler(0, (transform.rotation.eulerAngles.y + Time.deltaTime) * Speed, 0));
+        Spin = true;
+        this.GetComponent<BaseTower>().RotateToShoot = false;
+    }
+
+    public void StopSpin()
+    {
+        
+        Spin = false;
+        this.GetComponent<BaseTower>().RotateToShoot = true;
+        Timer = 0;
     }
 }

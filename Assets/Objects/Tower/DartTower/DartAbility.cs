@@ -14,7 +14,11 @@ public class DartAbility : TowerAbility
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void OnUse(BaseTower TowerRef)
     {
-        SceneManager.LoadScene("MainMenuScene");
+        //SceneManager.LoadScene("MainMenuScene");
+        if (TowerRef.GetComponent<SpinForSprite>())
+        {
+            TowerRef.GetComponent<SpinForSprite>().StartSpin();
+        }
         Debug.Log("Swipe!");
         if (SwordSwipeObj)
         {

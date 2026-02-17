@@ -9,6 +9,7 @@ public class TowerAbility : ScriptableObject
 {
 
     public float Cooldown = 5f;
+    public int Damage = 1;
     public Sprite AbilityImage;
     public AudioClip AbilityActivateNoise;
     // Start is called once before the first execution of Update after the MonoBehaviour is created

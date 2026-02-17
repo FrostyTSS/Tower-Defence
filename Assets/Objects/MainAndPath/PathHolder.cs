@@ -451,9 +451,10 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
 
     public void SelectTower(GameObject SelectedObject)
     {
-       
-            if (DraggingTower == false && SelectedTower == null && SelectedObject.GetComponent<BaseTower>())
-            {
+
+        // if (DraggingTower == false && SelectedTower == null && SelectedObject.GetComponent<BaseTower>())
+        if (DraggingTower == false &&  SelectedObject.GetComponent<BaseTower>())
+        {
            
             SelectedTower = SelectedObject.GetComponent<BaseTower>();
                 //SelectedTowerMat = SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().material;
@@ -486,22 +487,23 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             }
                 Debug.Log("Selected!");
             }
-         //   else if (SelectedTower)
-         else if (SelectedTower)
-            {
+        //   else if (SelectedTower)
+        //else if (SelectedTower)
+        else
+        {
             RangeVisual.SetActive(false);
             TargetingSettingsUIImage.sprite = AimTargetVisual.GetComponent<TargetSprite>().BadTarget;
             TargetingSettingsUIImage.color = Color.gray;
             SelectedTower.gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
-              //  SelectedTowerMat = null;
-                SelectedTower = null;
+            //  SelectedTowerMat = null;
+            SelectedTower = null;
             ShowUpgradeUI(false);
             ToggleTargetOptions(false);
             Debug.Log("Unselected!");
             AimTargetVisual.SetActive(false);
-            
-                ShowAbility(false);
-            
+
+            ShowAbility(false);
+
         }
             
 
@@ -1201,6 +1203,8 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 {
                     if (hit.transform.gameObject.layer != TowerLayerID)
                     {
+
+                        Debug.Log(hit.transform.name);
                         if (this.gameObject == null) // how am i getting erros for this
                         {
                             SelectTower(null);
