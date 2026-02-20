@@ -6,8 +6,13 @@ public class SpinForSprite : MonoBehaviour
     public bool Spin = false;
    public float Timer = 0; // make private later
     public float TimeToSpin = 5f;
+    public GameObject SwordSwingObj;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-   
+
+    private void Start()
+    {
+        SwordSwingObj.SetActive(false);
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -26,6 +31,7 @@ public class SpinForSprite : MonoBehaviour
 
     public void StartSpin()
     {
+        SwordSwingObj.SetActive(true);
         Spin = true;
         this.GetComponent<BaseTower>().RotateToShoot = false;
     }
@@ -35,6 +41,7 @@ public class SpinForSprite : MonoBehaviour
         
         Spin = false;
         this.GetComponent<BaseTower>().RotateToShoot = true;
+        SwordSwingObj.SetActive(false);
         Timer = 0;
     }
 }
