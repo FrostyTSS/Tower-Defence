@@ -46,6 +46,8 @@ public class BaseTower : MonoBehaviour
     public List<ProjectileBase> ProjectileList;
     public TextMeshPro AbilityTimerText;
 
+    public AudioClip ProjectileSound;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     //to do: strong targeting
@@ -359,7 +361,13 @@ public class BaseTower : MonoBehaviour
                         transform.LookAt(CurrentTarget.transform);
                         transform.eulerAngles = new Vector3(0, transform.rotation.eulerAngles.y, 0);
                     }
-                   // Quaternion RotatedForwardQ = Quaternion.LookRotation(TowerRef.CurrentTarget.transform.position - TowerRef.transform.position);
+
+                    if (ProjectileSound && this.GetComponent<AudioSource>())
+                    {
+                        this.GetComponent<AudioSource>().PlayOneShot(ProjectileSound);
+                    }
+
+                    // Quaternion RotatedForwardQ = Quaternion.LookRotation(TowerRef.CurrentTarget.transform.position - TowerRef.transform.position);
                     ProjectileList.Add(Instantiate(ProjectileType, transform.position, Quaternion.LookRotation(CurrentTarget.transform.position - transform.position)).GetComponent<ProjectileBase>());
                     ProjectileList[ProjectileList.Count - 1].ProjOwner = this;
                     ProjectileList[ProjectileList.Count - 1].ProjTargetObj = CurrentTarget;
@@ -413,6 +421,13 @@ public class BaseTower : MonoBehaviour
             // Quaternion RotatedForwardQ = Quaternion.LookRotation(TowerRef.CurrentTarget.transform.position - TowerRef.transform.position);
 
             // Debug.Log(ProjectileAngle);
+
+
+            if (ProjectileSound && this.GetComponent<AudioSource>())
+            {
+                this.GetComponent<AudioSource>().PlayOneShot(ProjectileSound);
+            }
+
             Vector3 SpawnPos = new Vector3(transform.position.x, ManualTargetingYPos, transform.position.z);
 
             ProjectileList.Add(Instantiate(ProjectileType, SpawnPos, Quaternion.LookRotation(ManualTargetPos - transform.position)).GetComponent<ProjectileBase>());

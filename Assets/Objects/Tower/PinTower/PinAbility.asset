@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a234c9a8d39f7146aaa887f6756ead1, type: 3}
+  m_Name: PinAbility
+  m_EditorClassIdentifier: Assembly-CSharp::PinAbilityScript
+  Cooldown: 5
+  Damage: 1
+  AbilityImage: {fileID: 21300000, guid: cc1414acb36036d4f81a79fe5d3b21c3, type: 3}
+  AbilityActivateNoise: {fileID: 8300000, guid: 38c1236158eea87419de040c872b4a07, type: 3}
+  AbilityProjType: {fileID: 428160056894756163, guid: bb0c0b8011d48d246b1f4b9dfc493e82, type: 3}
+  AbilityAmount: 18
+  TimeToLastFor: 2
+  NewDelay: 0.25
