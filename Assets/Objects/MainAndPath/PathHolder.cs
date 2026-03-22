@@ -242,6 +242,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 RoundFinishedSpawning = false;
                 WaveInProgress = true;
 
+            
            
             if (WaveData[Round].DialogueToLoad != null && WaveData[Round].DialogueToLoad.Length > 0
                 && DialogueHolder.instance)
@@ -842,26 +843,81 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     {
         if (this.GetComponent<AudioSource>() && Fading == false && LevelManager.instance.MusicList.Count > 0)
         {
-            Fading = true;
-            AudioSource ManagerSource = this.GetComponent<AudioSource>();
-            float MusicVolumeBase = this.GetComponent<AudioSource>().volume;
 
-            while (ManagerSource.volume > 0)
+            if (this.GetComponent<AudioSource>().clip != ClipToSwapTo)
             {
-                ManagerSource.volume -= MusicVolumeBase * Time.deltaTime / ThemeFadeTime;
+                Fading = true;
+                // AudioSource ManagerSource = this.GetComponent<AudioSource>();
+                float MusicVolumeBase = this.GetComponent<AudioSource>().volume;
 
-                yield return null;
-            }
+                AudioSource OldSongSource = this.GetComponent<AudioSource>();
+                AudioSource ManagerSource = this.gameObject.AddComponent<AudioSource>();
+                
+                ManagerSource.outputAudioMixerGroup = OldSongSource.outputAudioMixerGroup;
 
-            ManagerSource.Stop();
-            ManagerSource.clip = ClipToSwapTo;
-            ManagerSource.volume = 0;
-            ManagerSource.Play();
-            while (ManagerSource.volume < 1.0f)
-            {
-                ManagerSource.volume += MusicVolumeBase * Time.deltaTime / ThemeFadeTime;
+                ManagerSource.loop = true;
 
-                yield return null;
+
+                OldSongSource.priority = 140;
+                ManagerSource.priority = 150;
+                ManagerSource.Stop();
+                ManagerSource.clip = ClipToSwapTo;
+                ManagerSource.volume = 0;
+                ManagerSource.Play();
+
+                float ElapsedTime = 0;
+                //ThemeFadeTime = 10f;
+                while (ElapsedTime < ThemeFadeTime)
+                {
+                    Debug.Log(ElapsedTime);
+                    ManagerSource.volume = Mathf.Lerp(0, MusicVolumeBase, (ElapsedTime / ThemeFadeTime) + 0.45f);
+                    OldSongSource.volume = Mathf.Lerp(MusicVolumeBase, 0, (ElapsedTime / ThemeFadeTime));
+                    ElapsedTime += Time.deltaTime;
+
+                    // Yield here
+                    yield return null;
+                }
+                Destroy(OldSongSource);
+
+                // while (ManagerSource.volume < MusicVolumeBase)
+                //{
+                /*
+                for (float t = 0; t < ThemeFadeTime; t += Time.fixedDeltaTime)
+                {
+                    // Debug.Log("Plsu time is " + MusicVolumeBase * Time.fixedDeltaTime / ThemeFadeTime);
+                    Debug.Log("new time is " + ManagerSource.volume);
+                    float TimeNormal = Time.fixedDeltaTime / ThemeFadeTime;
+                    ManagerSource.volume = Mathf.Lerp(0, 0.5f, TimeNormal);
+                    OldSongSource.volume = Mathf.Lerp(0.5f, 0, TimeNormal);
+                    yield return null;
+                }
+                    //  ManagerSource.volume += MusicVolumeBase * Time.fixedDeltaTime / ThemeFadeTime;
+                    // OldSongSource.volume -= MusicVolumeBase * Time.fixedDeltaTime / ThemeFadeTime;
+
+                   
+                //}
+                Destroy(OldSongSource);
+
+                //swapped from managersource to oldsong
+                /*
+                while (ManagerSource.volume > 0)
+                {
+                    ManagerSource.volume -= MusicVolumeBase * Time.deltaTime / ThemeFadeTime;
+
+                    yield return null;
+                }
+
+                ManagerSource.Stop();
+                ManagerSource.clip = ClipToSwapTo;
+                ManagerSource.volume = 0;
+                ManagerSource.Play();
+                while (ManagerSource.volume < 1.0f)
+                {
+                    ManagerSource.volume += MusicVolumeBase * Time.deltaTime / ThemeFadeTime;
+
+                    yield return null;
+                }
+                */
             }
             Fading = false;
         }

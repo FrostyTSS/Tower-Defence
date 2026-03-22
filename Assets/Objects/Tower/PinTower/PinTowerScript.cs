@@ -50,9 +50,9 @@ public class PinTowerScript : BaseTower
     {
 
 
-        if (ProjectileSound)
+        if (ProjectileSound && this.GetComponent<AudioSource>())
         {
-            PathHolder.instance.GetComponent<AudioSource>().PlayOneShot(ProjectileSound);
+            this.GetComponent<AudioSource>().PlayOneShot(ProjectileSound);
         }
 
         //if ((ProjectileList.Count + 1) * Damage <= CurrentTarget.Health) // make sure you only use the amount of shots necessary to kill
@@ -147,9 +147,9 @@ public class PinTowerScript : BaseTower
         Vector3 ProjectileAngle = RotatedForward + new Vector3(0, 0, 0);
         for (int i = 0; i < AmountI; i++)
         {
-            if (ProjectileSound)
+            if (ProjectileSound && this.GetComponent<AudioSource>())
             {
-                PathHolder.instance.GetComponent<AudioSource>().PlayOneShot(ProjectileSound);
+                this.GetComponent<AudioSource>().PlayOneShot(ProjectileSound);
             }
             ProjectileAngle += new Vector3(0, 360 / AmountI, 0);
             // Debug.Log(ProjectileAngle);

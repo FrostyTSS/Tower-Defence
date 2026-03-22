@@ -6,6 +6,8 @@ position: -77,-58
 
 
 ???:TEST
+<<MusicSwap MainManager 2 4>>//0 lobby 1 round 2 chat for first value
+???:MUSICTEST
 <<jump LizEdFirst>>
 ???: Hello, fellow cowboy. 
 //<<spriteswap EvilGuySprite 2>>
@@ -20,7 +22,8 @@ position: -77,-58
 
 <<SpriteSwap LeftSideSprite 0>>
 Elizabeth: Do I really have to do this? I'm more of an engineer then a programmer, y'know..
-<<ChangeTypewriterSpeed DialogueSystem 20>>
+<<ChangeTypewriterSpeed DialogueSystem 70>>
+
 Elizabeth: Plus, why *this* law firm? Just 'cause they bruised your ego or..?
 <<SpriteSwap LeftSideSprite 1>>
 
