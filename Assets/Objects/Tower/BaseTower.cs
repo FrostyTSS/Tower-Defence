@@ -132,11 +132,14 @@ public class BaseTower : MonoBehaviour
     //  public virtual void  FixedUpdate()
     void FixedUpdate()
     {
+
+       
         if (DelayTimer > 0)
         {
             
             DelayTimer -= Time.fixedDeltaTime;
         }
+        DelayChecker();
         if (TowerAbilityCooldown > 0)
         {
             if (AbilityTimerText)
@@ -187,6 +190,11 @@ public class BaseTower : MonoBehaviour
         }
     }
 
+
+    public virtual void DelayChecker()
+    {
+
+    }
     /*
     public virtual void ApplyUpgrade(string UpgradeID) // add support for replacing upgrades, although given the effect will retrigger it should be fine. Do wish we could have individual effect ones.. well we can but not editable from effectinfo.
     {

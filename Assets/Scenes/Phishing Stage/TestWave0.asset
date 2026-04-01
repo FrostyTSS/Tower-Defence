@@ -15,7 +15,7 @@ MonoBehaviour:
   WaveOrder:
   - Enemy: {fileID: 647415822513163612, guid: 5781e8f3ba897544fb3f963c30bbe7e8, type: 3}
     DelayUntilNextEnemyType: 5
-    AmountOfEnemy: 1
+    AmountOfEnemy: 5
     SwarmDelay: 1
     EnemyCamo: 0
   - Enemy: {fileID: 647415822513163612, guid: 5781e8f3ba897544fb3f963c30bbe7e8, type: 3}

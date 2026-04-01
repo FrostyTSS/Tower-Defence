@@ -701,7 +701,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                 Round++;
                 UpdateRoundCounter();
 
-                if (AutoRoundStart && Lives > 0)
+                if (AutoRoundStart && Lives > 0 && LevelManager.instance)
                          {
                     StartNewRound();
                          }
@@ -812,7 +812,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public void MusicSwap(int TypeOfMus, int MusID) // 0 for lobby, 1 for round, 2 for chat
     {
 
-        if (MusID >= 0 && MusID < LevelManager.instance.MusicList.Count)
+        if (LevelManager.instance && MusID >= 0 && MusID < LevelManager.instance.MusicList.Count)
         {
             switch (TypeOfMus)
             {
