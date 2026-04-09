@@ -5,10 +5,10 @@ using UnityEngine;
 public class SniperTowerScript : BaseTower
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public bool AbilityActive = false;
+  
     public bool AbilitySpinPause = false;
     public float RotateSpeed = 2.5f;
-    public float AbilityLength = 5f;
+   // public float AbilityLength = 5f;
     public float AbilityDelay = 1f; // put on ability script
     //float Timer = 0;
    public float PauseTime = 2;
@@ -18,7 +18,7 @@ public class SniperTowerScript : BaseTower
      IEnumerator AbilityShoot()
     {
         //pause for a second, raycast forward, if hit, shoot, pause a bit longer then keep spininng
-      //  PinAbilityScript AbiRef = (PinAbilityScript)Ability;
+        //  PinAbilityScript AbiRef = (PinAbilityScript)Ability;
 
         /*
         if (AbilityActive && AbilitySpinPause)
@@ -34,36 +34,84 @@ public class SniperTowerScript : BaseTower
 
         }
         */
-        float AbilityTimer = 0;
-        float DelayTimer = AbilityDelay;
-        while (AbilityTimer < AbilityLength)
-        {
-            Debug.Log(AbilityTimer);
-            AbilityTimer += Time.fixedDeltaTime + AbilityDelay;
-            transform.Rotate(new Vector3(0, RotateSpeed, 0), Space.World);
-            //DelayTimer -= Time.fixedDeltaTime;
-            //if (DelayTimer <= 0)
-            // {
-            //     DelayTimer = NewDelay;
 
-            AbilityShootAction();
-            yield return new WaitForSeconds(AbilityDelay);
-            // }
+        float CurrentRot = 0;
+        DelayTimer = TimeBetweenShots / 3;
+        float MaxRot = 1800;
+        if (Ability is SniperAbility sniperAbility) // if casting fails then 'skill is AttackSkill' returns false and nothing is assigned to attackSkill
+        {
+            MaxRot = sniperAbility.TotalRotAngles;
         }
-       
-        yield return new WaitForSeconds(PauseTime);
+
+        while (CurrentRot < MaxRot)
+        {
+           
+            // AbilityTimer += Time.fixedDeltaTime + AbilityDelay;
+            DelayTimer -= Time.fixedDeltaTime;
+            //AbilityTimer += Time.fixedDeltaTime;
+            transform.Rotate(new Vector3(0, RotateSpeed, 0), Space.World);
+            CurrentRot += RotateSpeed;
+           
+            if (DelayTimer <= 0) // double speed shot
+            {
+                AbilityShootAction();
+                yield return new WaitForSeconds(AbilityDelay);
+                DelayTimer = TimeBetweenShots / 3;
+            }
+           // DelayChecker();
+
+
+
+                 yield return null;
+        }
+             
+
+
+
+
+            /*
+            float AbilityTimer = 0;
+            //float DelayTimer = AbilityDelay;
+            DelayTimer = TimeBetweenShots;
+            while (AbilityTimer < AbilityLength)
+            {
+                Debug.Log(AbilityTimer);
+               // AbilityTimer += Time.fixedDeltaTime + AbilityDelay;
+                DelayTimer += Time.fixedDeltaTime;
+                AbilityTimer += Time.fixedDeltaTime;
+                transform.Rotate(new Vector3(0, RotateSpeed, 0), Space.World);
+                //DelayTimer -= Time.fixedDeltaTime;
+                //if (DelayTimer <= 0)
+                // {
+                //     DelayTimer = NewDelay;
+
+                /*
+                if (DelayTimer >= TimeBetweenShots / 2) // double speed shot
+                {
+                    AbilityShootAction();
+                    DelayTimer = TimeBetweenShots;
+                }
+                */
+            // yield return new WaitForSeconds(AbilityDelay);
+
+            //yield return null;
+            // }
+            // }
+
+            yield return new WaitForSeconds(PauseTime);
+        DelayTimer = TimeBetweenShots;
         AbilityActive = false;
     }
 
     public override void DelayChecker()
     {
-        if (DelayTimer <=  1.25f && BulletTrail.GetPosition(1) != InitalLinePos) // bang bang, hide flash trail
+        if (DelayTimer <=  1.25f && BulletTrail.GetPosition(1) != InitalLinePos ) // bang bang, hide flash trail
         {
             BulletTrail.SetPosition(1, InitalLinePos);
         }
     }
 
-     void AbilityCaller()
+   public  void AbilityCaller()
     {
         AbilityActive = true;
         StartCoroutine(AbilityShoot());
@@ -73,15 +121,29 @@ public class SniperTowerScript : BaseTower
     {
         RaycastHit hit;
 
+        Debug.Log("Sniper Ability BANG");
         LayerMask layerMask = LayerMask.GetMask("Enemy");
 
         //line renderer, sound
-
+        
+        if (ProjectileSound && this.GetComponent<AudioSource>())
+        {
+            this.GetComponent<AudioSource>().PlayOneShot(ProjectileSound);
+        }
         if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, layerMask   ))
         {
             hit.transform.GetComponent<BaseEnemy>().TakeDamage(Damage, this);
+            if (BulletTrail)
+            {
+                BulletTrail.SetPosition(1, hit.transform.position);
+            }
         }
-           
+        else if (BulletTrail)
+        {
+            Debug.Log("Sniper Ability Miss..");
+            BulletTrail.SetPosition(1, transform.forward * 20);
+        }
+
     }
 
     private void Awake()

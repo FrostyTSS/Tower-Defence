@@ -241,12 +241,11 @@ MonoBehaviour:
   ProjectileList: []
   AbilityTimerText: {fileID: 0}
   ProjectileSound: {fileID: 8300000, guid: d0c51b1b6da8347488533de018aa10f0, type: 3}
-  Ability: {fileID: 0}
+  Ability: {fileID: 11400000, guid: e4f2643f0f9efd545b61c2a77f7dcfc2, type: 2}
   TowerAbilityCooldown: 0
   AbilityActive: 0
   AbilitySpinPause: 0
-  RotateSpeed: 2.5
-  AbilityLength: 5
+  RotateSpeed: 10
   AbilityDelay: 1
   PauseTime: 2
   InitalLinePos: {x: 0, y: 0, z: 0}

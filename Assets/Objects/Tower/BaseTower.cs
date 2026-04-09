@@ -56,6 +56,7 @@ public class BaseTower : MonoBehaviour
     //abilities
     public TowerAbility Ability;
     public float TowerAbilityCooldown = 0;
+    public bool AbilityActive = false;
 
     private void OnMouseDown()
     {
@@ -134,7 +135,7 @@ public class BaseTower : MonoBehaviour
     {
 
        
-        if (DelayTimer > 0)
+        if (DelayTimer > 0 && AbilityActive == false)
         {
             
             DelayTimer -= Time.fixedDeltaTime;
