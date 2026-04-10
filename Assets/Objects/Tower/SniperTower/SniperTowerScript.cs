@@ -105,7 +105,7 @@ public class SniperTowerScript : BaseTower
 
     public override void DelayChecker()
     {
-        if (DelayTimer <=  1.25f && BulletTrail.GetPosition(1) != InitalLinePos ) // bang bang, hide flash trail
+        if (DelayTimer <=  1.25f && BulletTrail.GetPosition(1) != InitalLinePos && AbilityActive == false) // bang bang, hide flash trail
         {
             BulletTrail.SetPosition(1, InitalLinePos);
         }
@@ -140,8 +140,10 @@ public class SniperTowerScript : BaseTower
         }
         else if (BulletTrail)
         {
-            Debug.Log("Sniper Ability Miss..");
-            BulletTrail.SetPosition(1, transform.forward * 20);
+            Debug.Log("Sniper Ability Miss.." + transform.forward * 200);
+            Vector3 BulletPos = transform.forward * 200;
+            BulletPos.y = transform.position.y + 0.15f;
+            BulletTrail.SetPosition(1, BulletPos);
         }
 
     }
@@ -152,6 +154,7 @@ public class SniperTowerScript : BaseTower
         {
             BulletTrail = this.GetComponent<LineRenderer>();
             InitalLinePos = transform.position; // add offset
+            InitalLinePos.y += 0.15f;
             BulletTrail.SetPosition(0, InitalLinePos);
             BulletTrail.SetPosition(1, InitalLinePos);
         }
