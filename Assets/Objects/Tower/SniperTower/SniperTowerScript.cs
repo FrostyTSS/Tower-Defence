@@ -36,8 +36,15 @@ public class SniperTowerScript : BaseTower
         */
 
         float CurrentRot = 0;
-        DelayTimer = TimeBetweenShots / 3;
         float MaxRot = 1800;
+        DelayTimer = TimeBetweenShots / 3;
+        int randomvalue = UnityEngine.Random.Range(0, 1);
+        if (randomvalue == 1)
+        {
+            MaxRot += 360;
+            RotateSpeed += 1;
+        }
+        
         if (Ability is SniperAbility sniperAbility) // if casting fails then 'skill is AttackSkill' returns false and nothing is assigned to attackSkill
         {
             MaxRot = sniperAbility.TotalRotAngles;
@@ -121,7 +128,7 @@ public class SniperTowerScript : BaseTower
     {
         RaycastHit hit;
 
-        Debug.Log("Sniper Ability BANG");
+        Debug.Log("Sniper Ability Test..");
         LayerMask layerMask = LayerMask.GetMask("Enemy");
 
         //line renderer, sound
@@ -130,6 +137,20 @@ public class SniperTowerScript : BaseTower
         {
             this.GetComponent<AudioSource>().PlayOneShot(ProjectileSound);
         }
+        //The cube will be 2 units wide (1 half in x), it will be 4 units high (2 half in y) and 6 units long (3 half in z).
+        //BoxCast(pos, new Vector3(1,2,3), dir, Quaternion.LookRotation(dir));
+        if (Physics.BoxCast(transform.position, new Vector3(1, 2, 3), transform.forward, out hit, Quaternion.LookRotation(transform.forward), 300, layerMask))
+            {
+            hit.transform.GetComponent<BaseEnemy>().TakeDamage(Damage, this);
+            Debug.Log("Sniper Ability Bang!" + hit.point);
+            if (BulletTrail)
+            {
+                BulletTrail.SetPosition(1, hit.transform.position);
+            }
+
+        }
+
+        /*
         if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, layerMask   ))
         {
             hit.transform.GetComponent<BaseEnemy>().TakeDamage(Damage, this);
@@ -138,6 +159,7 @@ public class SniperTowerScript : BaseTower
                 BulletTrail.SetPosition(1, hit.transform.position);
             }
         }
+        */
         else if (BulletTrail)
         {
             Debug.Log("Sniper Ability Miss.." + transform.forward * 200);
