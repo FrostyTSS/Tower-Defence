@@ -336,13 +336,16 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
     public void UseAbility()
     {
         Debug.Log("Ability Use");
-        if (SelectedTower)
+        if (SelectedTower && SelectedTower.Ability)
         {
             if (SelectedTower.TowerAbilityCooldown <= 0)
             {
                 GameObject AbilityTextRef = Instantiate(AbilityTimer3D, SelectedTower.transform.position + AbilityTimer3D.transform.position, AbilityTimer3D.transform.rotation);
 
                 SelectedTower.GetComponent<BaseTower>().AbilityTimerText = AbilityTextRef.GetComponent<TextMeshPro>();
+                Color tempcolor = SelectedTower.GetComponent<BaseTower>().AbilityTimerText.color;
+                tempcolor.a = 0;
+                SelectedTower.GetComponent<BaseTower>().AbilityTimerText.color = tempcolor;
 
                 if (SelectedTower.Ability.AbilityActivateNoise)
                 {
@@ -350,6 +353,7 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
                     GetComponent<AudioSource>().PlayOneShot(SelectedTower.Ability.AbilityActivateNoise);
                 }
                 SelectedTower.UseAbility();
+
                 AbilityTimerGif.enabled = true;
             }
             else

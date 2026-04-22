@@ -150,8 +150,9 @@ MonoBehaviour:
   ProjectileList: []
   AbilityTimerText: {fileID: 0}
   ProjectileSound: {fileID: 0}
-  Ability: {fileID: 0}
+  Ability: {fileID: 11400000, guid: c641fcd8d20655148a0ef8e882d445c2, type: 2}
   TowerAbilityCooldown: 0
+  AbilityActive: 0
   CurrentlyAffectedTowers: []
   TowerBuffList: []
 --- !u!82 &2864974809503497268
@@ -278,7 +279,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.816, z: 0.080800064}
-  m_LocalScale: {x: 20, y: 20, z: 0}
+  m_LocalScale: {x: 17.3484, y: 17.3484, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8731341550865387509}

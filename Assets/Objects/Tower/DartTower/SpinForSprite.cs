@@ -34,12 +34,14 @@ public class SpinForSprite : MonoBehaviour
         SwordSwingObj.SetActive(true);
         Spin = true;
         this.GetComponent<BaseTower>().RotateToShoot = false;
+        this.GetComponent<BaseTower>().AbilityActive = true;
     }
 
     public void StopSpin()
     {
         
         Spin = false;
+        this.GetComponent<BaseTower>().AbilityActive = false;
         this.GetComponent<BaseTower>().RotateToShoot = true;
         SwordSwingObj.SetActive(false);
         Timer = 0;

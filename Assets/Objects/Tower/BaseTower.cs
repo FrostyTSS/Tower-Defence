@@ -143,10 +143,12 @@ public class BaseTower : MonoBehaviour
         DelayChecker();
         if (TowerAbilityCooldown > 0)
         {
-            if (AbilityTimerText)
+            if (AbilityTimerText && AbilityActive == false)
             {
-               
-                AbilityTimerText.text = TowerAbilityCooldown.ToString("#.00") + " ";
+                Color tempcolor = AbilityTimerText.color;
+                tempcolor.a = 1;
+                AbilityTimerText.color = tempcolor;
+                AbilityTimerText.text = TowerAbilityCooldown.ToString("#.0") + " ";
             }
             TowerAbilityCooldown -= Time.fixedDeltaTime;
             if (TowerAbilityCooldown < 0)
