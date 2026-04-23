@@ -14,6 +14,8 @@ public class EMPEnemy : BaseEnemy
    // float OGDuration = 1;
    // float OGSize = 1;
 
+    //note to self: 0 hp as it's a trap, have to make sure it doesn't blow up!!!
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void OnStart()
     {
@@ -36,7 +38,7 @@ public class EMPEnemy : BaseEnemy
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetKeyDown(KeyCode.G))
         {

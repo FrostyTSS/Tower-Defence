@@ -151,6 +151,7 @@ MonoBehaviour:
   GlanceSound: {fileID: 0}
   ParticleColour: {r: 0, g: 0.03137255, b: 1, a: 0}
   EnemyFutureDamage: 0
+  LifeLostOnEndOfTrack: 2
 --- !u!82 &4049479130020318214
 AudioSource:
   m_ObjectHideFlags: 0

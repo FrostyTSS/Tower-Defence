@@ -784,9 +784,9 @@ public class PathHolder : MonoBehaviour // was intended to just hold the paths e
             //RoundText.text = "Round " + (Round + 1).ToSafeString();
         }
     }
-    public void HurtPlayer()
+    public void HurtPlayer(float Damage)
     {
-        Lives -= 1;
+        Lives -= Damage;
         UpdateLivesCounter();
         EnemyCheck();
         if (Lives <= 0)

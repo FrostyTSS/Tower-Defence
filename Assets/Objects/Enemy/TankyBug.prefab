@@ -132,7 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PathManager: {fileID: 0}
   CurrentPath: 0
-  MaxHealth: 1
+  MaxHealth: 5
   Health: 2
   MaxSpeed: 1
   CurrentSpeed: 0
@@ -151,6 +151,7 @@ MonoBehaviour:
   GlanceSound: {fileID: 8300000, guid: 55f4223d95fe2bc43a30e75d69f945e1, type: 3}
   ParticleColour: {r: 0.33333334, g: 0.30980393, b: 0.22352943, a: 0}
   EnemyFutureDamage: 0
+  LifeLostOnEndOfTrack: 5
 --- !u!82 &-2653693358429847746
 AudioSource:
   m_ObjectHideFlags: 0

@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 
 
 
@@ -15,14 +17,33 @@ public class WallTowerScript : BaseTower
     {
         
     }
-    private void Start()
+
+    public IEnumerator RotateAroundOnBreak()
     {
-    
+        float CurrentRot = 0;
+        float MaxRot = 90;
+        //WallHolder.transform.RotateAround(WallHolder.transform.position, Vector3.up, 90);
+        while (CurrentRot <= MaxRot)
+        {
+
+            // AbilityTimer += Time.fixedDeltaTime + AbilityDelay;
+            DelayTimer -= Time.fixedDeltaTime;
+            //AbilityTimer += Time.fixedDeltaTime;
+            transform.Rotate(new Vector3(0, TimeBetweenShots, 0) * Time.fixedDeltaTime, Space.World);
+            CurrentRot += TimeBetweenShots * Time.fixedDeltaTime;
+            yield return null;
+        }
+
+        
+        transform.Rotate(new Vector3(0, MaxRot, 0), Space.World);
+        yield return null;
     }
-    private void FixedUpdate()
-    {
-        WallHolder.transform.RotateAround(WallHolder.transform.position, Vector3.up, TimeBetweenShots * Time.fixedDeltaTime);
-    }
+
+   
+    //private void FixedUpdate() // trigger spin on wall break?
+    //{
+       // WallHolder.transform.RotateAround(WallHolder.transform.position, Vector3.up, TimeBetweenShots * Time.fixedDeltaTime);
+    //}
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 

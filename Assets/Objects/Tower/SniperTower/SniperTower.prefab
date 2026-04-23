@@ -245,7 +245,7 @@ MonoBehaviour:
   TowerAbilityCooldown: 0
   AbilityActive: 0
   AbilitySpinPause: 0
-  RotateSpeed: 10
+  RotateSpeed: 200
   AbilityDelay: 1
   PauseTime: 2
   InitalLinePos: {x: 0, y: 0, z: 0}

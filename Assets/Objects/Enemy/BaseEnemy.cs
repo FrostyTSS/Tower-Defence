@@ -34,6 +34,7 @@ public class BaseEnemy : MonoBehaviour
 
     //do future damage like will, add up
     public int EnemyFutureDamage = 0;
+    public int LifeLostOnEndOfTrack = 1;
    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -62,6 +63,7 @@ public class BaseEnemy : MonoBehaviour
         }
 
         Health = MaxHealth;
+        
         OnStart();
     }
 
@@ -106,7 +108,7 @@ public class BaseEnemy : MonoBehaviour
                     Debug.Log("Reached the end of its journey!");
                     if (ReachedEndOfTrack == false)
                     {
-                        PathManager.HurtPlayer();
+                        PathManager.HurtPlayer(LifeLostOnEndOfTrack);
                     }
                     ReachedEndOfTrack = true;
                     KillEnemy();

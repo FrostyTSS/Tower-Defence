@@ -131,6 +131,7 @@ MonoBehaviour:
   GlanceSound: {fileID: 0}
   ParticleColour: {r: 0.54901963, g: 0, b: 0.12941177, a: 0}
   EnemyFutureDamage: 0
+  LifeLostOnEndOfTrack: 0
   Radius: 10
   EMPLength: 5
   EMPParticleToSpawnOnTower: {fileID: 7672288687235619701, guid: 536c8d83246b10c4789167a9da484bad, type: 3}

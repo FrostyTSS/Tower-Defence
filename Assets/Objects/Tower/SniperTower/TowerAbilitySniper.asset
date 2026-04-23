@@ -16,4 +16,4 @@ MonoBehaviour:
   Damage: 1
   AbilityImage: {fileID: 21300000, guid: fa67b8fd40d73ec4c9da15eb3f3abb74, type: 3}
   AbilityActivateNoise: {fileID: 8300000, guid: 26506d9a19f740a4db6cf05209ae4499, type: 3}
-  TotalRotAngles: 2160
+  TotalRotAngles: 1080

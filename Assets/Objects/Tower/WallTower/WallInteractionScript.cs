@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 public class WallInteractionScript : MonoBehaviour
 {
-    public BaseTower OwningTower;
+    public WallTowerScript OwningTower;
     int EnemyLayerID;
     public int StartingUses = 10;
     public int RemainingUses = 10;
@@ -37,6 +37,7 @@ public class WallInteractionScript : MonoBehaviour
                 Debug.Log("Hit!");
                 if (RemainingUses <= 0)
                 {
+                    OwningTower.RotateAroundOnBreak();
                     StartCoroutine(ShieldRecharge());
                 }
             }

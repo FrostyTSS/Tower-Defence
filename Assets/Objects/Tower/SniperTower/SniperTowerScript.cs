@@ -50,14 +50,14 @@ public class SniperTowerScript : BaseTower
             MaxRot = sniperAbility.TotalRotAngles;
         }
 
-        while (CurrentRot < MaxRot)
+        while (CurrentRot <= MaxRot)
         {
            
             // AbilityTimer += Time.fixedDeltaTime + AbilityDelay;
             DelayTimer -= Time.fixedDeltaTime;
             //AbilityTimer += Time.fixedDeltaTime;
-            transform.Rotate(new Vector3(0, RotateSpeed, 0), Space.World);
-            CurrentRot += RotateSpeed;
+            transform.Rotate(new Vector3(0, RotateSpeed, 0) * Time.fixedDeltaTime, Space.World); // do i do deltatime here...?
+            CurrentRot += RotateSpeed * Time.fixedDeltaTime;
            
             if (DelayTimer <= 0) // double speed shot
             {
@@ -71,40 +71,40 @@ public class SniperTowerScript : BaseTower
 
                  yield return null;
         }
-             
 
 
 
+
+
+        /*
+        float AbilityTimer = 0;
+        //float DelayTimer = AbilityDelay;
+        DelayTimer = TimeBetweenShots;
+        while (AbilityTimer < AbilityLength)
+        {
+            Debug.Log(AbilityTimer);
+           // AbilityTimer += Time.fixedDeltaTime + AbilityDelay;
+            DelayTimer += Time.fixedDeltaTime;
+            AbilityTimer += Time.fixedDeltaTime;
+            transform.Rotate(new Vector3(0, RotateSpeed, 0), Space.World);
+            //DelayTimer -= Time.fixedDeltaTime;
+            //if (DelayTimer <= 0)
+            // {
+            //     DelayTimer = NewDelay;
 
             /*
-            float AbilityTimer = 0;
-            //float DelayTimer = AbilityDelay;
-            DelayTimer = TimeBetweenShots;
-            while (AbilityTimer < AbilityLength)
+            if (DelayTimer >= TimeBetweenShots / 2) // double speed shot
             {
-                Debug.Log(AbilityTimer);
-               // AbilityTimer += Time.fixedDeltaTime + AbilityDelay;
-                DelayTimer += Time.fixedDeltaTime;
-                AbilityTimer += Time.fixedDeltaTime;
-                transform.Rotate(new Vector3(0, RotateSpeed, 0), Space.World);
-                //DelayTimer -= Time.fixedDeltaTime;
-                //if (DelayTimer <= 0)
-                // {
-                //     DelayTimer = NewDelay;
+                AbilityShootAction();
+                DelayTimer = TimeBetweenShots;
+            }
+            */
+        // yield return new WaitForSeconds(AbilityDelay);
 
-                /*
-                if (DelayTimer >= TimeBetweenShots / 2) // double speed shot
-                {
-                    AbilityShootAction();
-                    DelayTimer = TimeBetweenShots;
-                }
-                */
-            // yield return new WaitForSeconds(AbilityDelay);
-
-            //yield return null;
-            // }
-            // }
-
+        //yield return null;
+        // }
+        // }
+        transform.Rotate(new Vector3(0, MaxRot, 0));
             yield return new WaitForSeconds(PauseTime);
         DelayTimer = TimeBetweenShots;
         AbilityActive = false;
