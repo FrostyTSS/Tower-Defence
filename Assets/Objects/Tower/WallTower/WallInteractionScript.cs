@@ -37,7 +37,7 @@ public class WallInteractionScript : MonoBehaviour
                 Debug.Log("Hit!");
                 if (RemainingUses <= 0)
                 {
-                    OwningTower.RotateAroundOnBreak();
+                    OwningTower.StartCoroutine(OwningTower.RotateAroundOnBreak());
                     StartCoroutine(ShieldRecharge());
                 }
             }

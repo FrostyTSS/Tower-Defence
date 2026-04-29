@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.Rendering.DebugUI;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 
 
@@ -12,30 +13,45 @@ public class WallTowerScript : BaseTower
 {
     public bool DebugSearchEnemy = false;
     public GameObject WallHolder;
+    public bool Rotating = false;
 
     private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            StartCoroutine(RotateAroundOnBreak());
+        }
     }
 
     public IEnumerator RotateAroundOnBreak()
     {
+
         float CurrentRot = 0;
-        float MaxRot = 90;
-        //WallHolder.transform.RotateAround(WallHolder.transform.position, Vector3.up, 90);
-        while (CurrentRot <= MaxRot)
-        {
-
-            // AbilityTimer += Time.fixedDeltaTime + AbilityDelay;
-            DelayTimer -= Time.fixedDeltaTime;
-            //AbilityTimer += Time.fixedDeltaTime;
-            transform.Rotate(new Vector3(0, TimeBetweenShots, 0) * Time.fixedDeltaTime, Space.World);
-            CurrentRot += TimeBetweenShots * Time.fixedDeltaTime;
-            yield return null;
-        }
-
         
-        transform.Rotate(new Vector3(0, MaxRot, 0), Space.World);
+        float MaxRot = 85; // idk why it goes 5 over normally? 85 if bugged
+        float CurrentActualRot = transform.eulerAngles.y;
+       // Debug.Log(CurrentActualRot);
+        if (Rotating == false) // if a divisble of 90
+        {
+            Rotating = true;
+            //WallHolder.transform.RotateAround(WallHolder.transform.position, Vector3.up, 90);
+            while (CurrentRot <= MaxRot)
+            {
+              //  Debug.Log(CurrentRot);
+
+                // AbilityTimer += Time.fixedDeltaTime + AbilityDelay;
+                // DelayTimer -= Time.fixedDeltaTime;
+                //AbilityTimer += Time.fixedDeltaTime;
+                transform.Rotate(new Vector3(0, TimeBetweenShots, 0) * Time.fixedDeltaTime, Space.World);
+                CurrentRot += TimeBetweenShots * Time.fixedDeltaTime;
+                yield return null;
+            }
+
+            Rotating = false;
+            transform.eulerAngles = new Vector3(0, (int)(CurrentActualRot + 90) ,0);
+            
+        }
+        // transform.Rotate(new Vector3(0, MaxRot, 0), Space.World);
         yield return null;
     }
 
